@@ -1,0 +1,1 @@
+module.exports=['admin', 'worker', 'doctor','visitor', 'criminal']
