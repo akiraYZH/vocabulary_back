@@ -1,6 +1,6 @@
-# francais_back
+# sequelize
 
-french vocabulary backend
+demonstration of sequelize
 
 ## QuickStart
 

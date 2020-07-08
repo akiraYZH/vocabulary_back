@@ -1,5 +1,5 @@
 const jwt = require('jsonwebtoken');
-const secret = 'token';  //密钥，不能丢
+const secret = 'yzh_secret';  //密钥，不能丢
 
  function addToken(data){ //创建token并导出
   const token = jwt.sign(data, secret, {expiresIn: '1h'});
@@ -30,7 +30,7 @@ function updateToken(tokens){
 
 function setToken(res, token){
   // ctx.append('token',token);
-  res.setHeader('token',token);
+  res.setHeader('Authentication',token);
 }
 
 module.exports ={addToken, decodeToken, updateToken, setToken};

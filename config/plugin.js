@@ -1,4 +1,4 @@
-"use strict";
+'use strict';
 
 /** @type Egg.EggPlugin */
 module.exports = {
@@ -6,17 +6,8 @@ module.exports = {
   // static: {
   //   enable: true,
   // }
-  cors: {
-    enable: true,
-    package: "egg-cors",
-  },
-  mysql: {
-    enable: true,
-    package: "egg-mysql",
-  },
-
-  sequelize: {
-    enable: true,
-    package: "egg-sequelize"
+  sequelize:{
+    enable:true,
+    package:"egg-sequelize"
   }
 };

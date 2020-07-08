@@ -1,30 +1,51 @@
-'use strict';
+"use strict";
 
 /**
  * @param {Egg.Application} app - egg application
  */
-module.exports = app => {
+module.exports = (app) => {
   const { router, controller } = app;
-  let prefix = '/api';
-  router.post(prefix+'/admin/login', controller.admin.login);
-  router.post(prefix+'/admin/getUserInfo', controller.admin.getUserInfo);
-  router.get(prefix+'/admin/getList', controller.admin.getList);
-  router.post(prefix+'/admin/add', controller.admin.add);
-  router.post(prefix+'/admin/update', controller.admin.update);
-  router.post(prefix+'/admin/del', controller.admin.del);
-  router.get(prefix+'/admin/checkAccount', controller.admin.checkAccount);
+  // 是否同步数据库结构
+  let isSync = true;
 
+  app.beforeStart(async () => {
+    if (isSync) {
+      // 自动同步models到数据库
+      await app.model.sync({
+        alter: true,
+        // force:true
+      });
+    }
+  });
 
-  router.post(prefix+'/user/register', controller.user.register);
-  router.post(prefix+'/user/login', controller.user.login);
-  router.get(prefix+'/user/getUserInfo', controller.user.getUserInfo);
-  router.get(prefix+'/user/getList', controller.user.getList);
-  router.get(prefix+'/user/checkAccount', controller.user.checkAccount);
-  router.post(prefix+'/user/updatePassword', controller.user.updatePassword);
-  router.post(prefix+'/user/del', controller.user.del);
+  // 角色模块
+  router.post("/api/roles/add", controller.roles.add);
+  router.get("/api/roles/get", controller.roles.get);
+  router.put("/api/roles/update", controller.roles.update);
+  router.delete("/api/roles/del", controller.roles.del);
 
-  router.post(prefix+'/vocabulary/add', controller.vocabulary.add);
+  //管理者模块
+  router.post("/api/admins/add", controller.admins.add);
+  router.get("/api/admins/get", controller.admins.get);
+  router.put("/api/admins/update", controller.admins.update);
+  router.delete("/api/admins/del", controller.admins.del);
+  router.post("/api/admins/check-account", controller.admins.checkAccount);
+  router.post("/api/admins/check-email", controller.admins.checkEmail);
+  router.post("/api/admins/login", controller.admins.login);
 
-  router.get('/*', controller.notFound.notFound);
-  router.post('/*', controller.notFound.notFound);
+  //用户模块
+  router.post("/api/users/add", controller.users.add);
+  router.get("/api/users/get", controller.users.get);
+  router.put("/api/users/update", controller.users.update);
+  router.delete("/api/users/del", controller.users.del);
+  router.post("/api/users/check-account", controller.users.checkAccount);
+  router.post("/api/users/check-email", controller.users.checkEmail);
+  router.post("/api/users/login", controller.users.login);
+  //捕获不匹配
+  router.post("/*", controller.notFound.notFound);
+  router.get("/*", controller.notFound.notFound);
+  router.put("/*", controller.notFound.notFound);
+  router.delete("/*", controller.notFound.notFound);
+  
+  
 };

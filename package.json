@@ -1,15 +1,13 @@
 {
-  "name": "francais_back",
+  "name": "sequelize",
   "version": "1.0.0",
-  "description": "french vocabulary backend",
+  "description": "demonstration of sequelize",
   "private": true,
   "egg": {
     "declarations": true
   },
   "dependencies": {
     "egg": "^2.15.1",
-    "egg-cors": "^2.2.3",
-    "egg-mysql": "^3.0.0",
     "egg-scripts": "^2.11.0",
     "egg-sequelize": "^5.2.1",
     "jsonwebtoken": "^8.5.1",
@@ -29,8 +27,8 @@
     "node": ">=10.0.0"
   },
   "scripts": {
-    "start": "egg-scripts start --daemon --title=egg-server-francais_back",
-    "stop": "egg-scripts stop --title=egg-server-francais_back",
+    "start": "egg-scripts start --daemon --title=egg-server-sequelize",
+    "stop": "egg-scripts stop --title=egg-server-sequelize",
     "dev": "egg-bin dev",
     "debug": "egg-bin debug",
     "test": "npm run lint -- --fix && npm run test-local",
@@ -47,6 +45,6 @@
     "type": "git",
     "url": ""
   },
-  "author": "akiraYu",
+  "author": "yzh",
   "license": "MIT"
 }
