@@ -41,6 +41,13 @@ module.exports = (app) => {
   router.post("/api/users/check-account", controller.users.checkAccount);
   router.post("/api/users/check-email", controller.users.checkEmail);
   router.post("/api/users/login", controller.users.login);
+
+  // 单词书模块
+  router.post("/api/books/add", controller.books.add);
+  router.get("/api/books/get", controller.books.get);
+  router.put("/api/books/update", controller.books.update);
+  router.delete("/api/books/del", controller.books.del);
+
   //捕获不匹配
   router.post("/*", controller.notFound.notFound);
   router.get("/*", controller.notFound.notFound);

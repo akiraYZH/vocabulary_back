@@ -78,7 +78,7 @@ class RolesService extends Service {
         return new ctx.helper._success(result);
       } else {
         ctx.status = 200;
-        return new ctx.helper._error("暂无数据");
+        return new ctx.helper._success("暂无数据");
       }
     } catch (error) {
       console.log(error);
@@ -88,38 +88,38 @@ class RolesService extends Service {
     }
   }
 
-  async permissions(data) {
-    const { ctx } = this;
-    const { Roles, Permissions } = this.app.model.Tables;
-    let routes = [];
-    try {
-      let role = await Roles.findOne({
-        where: { status: 1 },
-        include: {
-          model: PPermission,
-          attributes: ["id", "name", "apis"],
-          where: {
-            status: 1,
-          },
-          required: false,
-          as: "permissions",
-        },
-      });
+  // async permissions(data) {
+  //   const { ctx } = this;
+  //   const { Roles, Permissions } = this.app.model.Tables;
+  //   let routes = [];
+  //   try {
+  //     let role = await Roles.findOne({
+  //       where: { status: 1 },
+  //       include: {
+  //         model: PPermission,
+  //         attributes: ["id", "name", "apis"],
+  //         where: {
+  //           status: 1,
+  //         },
+  //         required: false,
+  //         as: "permissions",
+  //       },
+  //     });
 
-      console.log(role);
-      role.permissions.forEach((item) => {
-        routes.push(item.name);
-      });
+  //     console.log(role);
+  //     role.permissions.forEach((item) => {
+  //       routes.push(item.name);
+  //     });
 
-      ctx.status = 200;
-      return new ctx.helper._success(routes);
-    } catch (error) {
-      console.log(error);
+  //     ctx.status = 200;
+  //     return new ctx.helper._success(routes);
+  //   } catch (error) {
+  //     console.log(error);
 
-      ctx.status = 500;
-      return new ctx.helper._error(error);
-    }
-  }
+  //     ctx.status = 500;
+  //     return new ctx.helper._error(error);
+  //   }
+  // }
 
   async update(data) {
     const { ctx } = this;
@@ -158,8 +158,8 @@ class RolesService extends Service {
         ctx.status = 200;
         return new ctx.helper._success();
       } else {
-        ctx.status = 400;
-        return new ctx.helper._error("没有修改");
+        ctx.status = 200;
+        return new ctx.helper._success("没有修改");
       }
     } catch (error) {
       transaction.rollback();

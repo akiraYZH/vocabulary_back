@@ -2,12 +2,12 @@
 
 const Controller = require("egg").Controller;
 
-class RolesController extends Controller {
+class BooksController extends Controller {
   /**
- * @api {Post} /api/roles/add 角色
- * @apiGroup Roles
+ * @api {Post} /api/book/add 增加单词书
+ * @apiGroup Books
  *
- * @apiParam {String} name 角色名
+ * @apiParam {String} title 书名
  *
  * @apiSuccessExample  {json} 成功返回
 {
@@ -21,11 +21,11 @@ class RolesController extends Controller {
 
   async add() {
     const { ctx, service } = this;
-    const checkDataRes = ctx.helper._checkData(ctx, "name", "permissions");
+    const checkDataRes = ctx.helper._checkData(ctx, "title");
 
     if (checkDataRes.is_pass) {
       let body = ctx.request.body;
-      ctx.body = await service.roles.add(body);
+      ctx.body = await service.books.add(body);
     } else {
       ctx.status = 400;
       this.ctx.body = new this.ctx.helper._lack(checkDataRes.msg);
@@ -33,8 +33,8 @@ class RolesController extends Controller {
   }
 
   /**
-   * @api {Get} /api/roles/get 获得权限角色列表
-   * @apiGroup Roles
+   * @api {Get} /api/books/get 获得单词书列表
+   * @apiGroup Books
    * 
    * @apiSuccessExample
    {
@@ -43,11 +43,7 @@ class RolesController extends Controller {
     "data": [
         {
             "id": 1,
-            "name": "admin",
-            "_permissions": [
-                "home",
-                "about"
-            ]
+            "title": "基本词汇"
         }
     ]
 }
@@ -55,20 +51,14 @@ class RolesController extends Controller {
    */
   async get() {
     const { ctx, service } = this;
-    console.log(321);
-    
-    ctx.body = await service.roles.get();
+    ctx.body = await service.books.get();
   }
 
-
-
-
   /**
-   * @api {Put} /api/roles/update 获得权限角色列表
-   * @apiGroup Roles
-   * @apiParam {Number} id 角色ID
-   * @apiParam {String} name 角色名字（可选）
-   * @apiParam {Arrary} permissions 权限标识符数组（可选）
+   * @api {Put} /api/books/update 更改单词书名称
+   * @apiGroup Books
+   * @apiParam {Number} id 单词书ID
+   * @apiParam {String} title 单词书名（可选）
    * 
    * @apiSuccessExample
    {
@@ -81,20 +71,18 @@ class RolesController extends Controller {
     const { ctx, service } = this;
     let checkDataRes = ctx.helper._checkData(ctx, "id");
     console.log(123);
-    
-    if(checkDataRes.is_pass){
+
+    if (checkDataRes.is_pass) {
       let body = ctx.request.body;
-    ctx.body = await service.roles.update(body);
-    }else{
+      ctx.body = await service.books.update(body);
+    } else {
       ctx.body = new ctx.helper._lack(checkDataRes.msg);
     }
-
-    
   }
   /**
- * @api {Delete} /api/roles/del 删除角色
- * @apiGroup Rols
- * @apiParam {Number} id 角色ID
+ * @api {Delete} /api/books/del 删除管理者
+ * @apiGroup Books
+ * @apiParam {Number} id 书本ID
  * 
  *
  * @apiSuccessExample  {json} 成功返回
@@ -108,11 +96,11 @@ class RolesController extends Controller {
     let checkDataRes = ctx.helper._checkData(ctx, "id");
     if (checkDataRes.is_pass) {
       let query = ctx.query;
-      ctx.body = await service.roles.del(query);
+      ctx.body = await service.books.del(query);
     } else {
       ctx.body = ctx.helper._lack(checkDataRes.msg);
     }
   }
 }
 
-module.exports = RolesController;
+module.exports = BooksController;
