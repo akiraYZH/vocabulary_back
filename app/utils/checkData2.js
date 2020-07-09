@@ -7,7 +7,6 @@ const {
   regEmail,
   regText,
   regNumber,
-  regBoolean,
 } = require("../utils/regModule");
 
 const extraCheck = (targetName, targetVal) => {
@@ -36,29 +35,27 @@ const extraCheck = (targetName, targetVal) => {
         return regText(targetVal);
       case "blog_id":
         return regNumber(targetVal);
-      case "title":
-      case "content":
-      case "path":
-      case "url":
-      case "avatar_url":
-      case "url":
-      case "imgUrl":
-      case "main_img":
-      case "thatDay":
-      case "points":
-      case "token":
-      case "spelling":
-      case "phonetic":
-      case "detail":
-      case "sentences":
-      case "type":
-      case "explaination":
-      case "fr":
-      case "cn":
-        return true;
+      // case "title":
+      // case "content":
+      // case "path":
+      // case "url":
+      // case "avatar_url":
+      // case "url":
+      // case "imgUrl":
+      // case "main_img":
+      // case "token":
+      // case "spelling":
+      // case "phonetic":
+      // case "sentences":
+      // case "type":
+      // case "explainations":
+      // case "explaination_cn":
+      // case "sentence_fr":
+      // case "sentence_cn":
+      //   return true;
       default:
-        return regNormal(targetVal);
-      // return true;
+        // return regNormal(targetVal);
+      return true;
     }
   }
 };

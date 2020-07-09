@@ -14,17 +14,31 @@ module.exports = (app) => {
         comment: "词性",
         allowNull: false,
       },
-      explaination: {
+      explaination_cn: {
         type: STRING(255),
-        defaultValue: 1,
         comment: "中文解释",
         allowNull: false,
       },
-      status: {
-        type: INTEGER(11),
-        defaultValue: 1,
-        comment: "1:正常 0:停止使用",
+      sentence_fr: {
+        type: STRING(255),
+        comment: "法语例句",
+        allowNull:true,
       },
+      audio:{
+        type: STRING(255),
+        comment: "法语句子音频",
+        allowNull:true,
+      },
+      sentence_cn: {
+        type: STRING(255),
+        comment: "中文例句",
+        allowNull: true,
+      },
+      sort:{
+        type:INTEGER,
+        comment:"排序",
+        allowNull:false
+      }
     },
     {
       //timestamp:true会自动创建created_at和updated_at字段

@@ -4,7 +4,7 @@ const Controller = require("egg").Controller;
 
 class BooksController extends Controller {
   /**
- * @api {Post} /api/book/add 增加单词书
+ * @api {Post} /api/books/add 增加单词书
  * @apiGroup Books
  *
  * @apiParam {String} title 书名

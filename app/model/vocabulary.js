@@ -19,9 +19,10 @@ module.exports = (app) => {
         comment: "单词音标",
         allowNull: true,
       },
-      detail: {
-        type: TEXT,
-        comment: "词性：type+解释：text",
+      difficulty:{
+        type: INTEGER,
+        comment: "难度：1为基础， 2为中级， 3为高级",
+        defaultValue:1,
         allowNull: false,
       },
       image: {
@@ -34,26 +35,25 @@ module.exports = (app) => {
         comment: "单词音频地址",
         allowNull: true,
       },
-      sentences: {
-        type: TEXT,
-        comment: "例句:fr法语例句， cn中文例句",
-        allowNull: true,
-      },
-      status: {
-        type: INTEGER(11),
-        defaultValue: 1,
-        comment: "1:正常 0:停止使用",
-      },
     },
+    {
+      indexes: [
+        {
+          unique: true,
+          fields: ["spelling"],
+        },
+      ],
+    }
   );
 
   
 
   Vocabulary.associate = function(){
-    app.model.Vocabulary.hasMany(app.model.Explainations, {foreignKey: "word_id"});
+    app.model.Vocabulary.hasMany(app.model.Explainations, {foreignKey: "word_id", onDelete:"cascade"});
     app.model.Vocabulary.belongsToMany(app.model.Books, {
       through: "vocabulary_and_books",
       foreignKey: "word_id",
+      onDelete:"cascade"
     });
   }
   

@@ -48,6 +48,12 @@ module.exports = (app) => {
   router.put("/api/books/update", controller.books.update);
   router.delete("/api/books/del", controller.books.del);
 
+  // 单词模块
+  router.post("/api/words/add", controller.words.add);
+  router.get("/api/words/get", controller.words.get);
+  router.put("/api/words/update", controller.words.update);
+  router.delete("/api/words/del", controller.words.del);
+
   //捕获不匹配
   router.post("/*", controller.notFound.notFound);
   router.get("/*", controller.notFound.notFound);

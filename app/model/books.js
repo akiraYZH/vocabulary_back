@@ -26,6 +26,7 @@ module.exports = (app) => {
       app.model.Books.belongsToMany(app.model.Vocabulary, {
         through: "vocabulary_and_books",
         foreignKey: "book_id",
+        onDelete:"cascade"
       });
     }
     

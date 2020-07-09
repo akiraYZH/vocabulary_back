@@ -135,7 +135,6 @@ class RolesService extends Service {
       let result = await role.update(data, { transaction });
 
       if (data.permissions) {
-        updatePermissions = true;
         let rolePermissions = await role.getPermissions();
         //先清空
         rolePermissions.forEach(
@@ -144,7 +143,7 @@ class RolesService extends Service {
 
         //再插入
         for (let i = 0; i < data.permissions.length; i++) {
-          let permission = {name:data.permissions[i]};
+          let permission = { name: data.permissions[i] };
           let newPermission = await Permissions.create(permission, {
             transaction,
           });
@@ -153,11 +152,11 @@ class RolesService extends Service {
       }
 
       await transaction.commit();
-
-      if (result[0] > 0 || updatePermissions) {
+      if (result) {
+        
         ctx.status = 200;
         return new ctx.helper._success();
-      } else {
+      }else{
         ctx.status = 200;
         return new ctx.helper._success("没有修改");
       }
@@ -185,7 +184,7 @@ class RolesService extends Service {
       }
     } catch (error) {
       console.log(error);
-      
+
       ctx.status = 500;
       return new ctx.helper._error(error);
     }
