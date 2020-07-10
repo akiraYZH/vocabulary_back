@@ -8,19 +8,27 @@ class WordsController extends Controller {
  * @apiGroup Words
  *
  * @apiParam {String} spelling 单词
+ * @apiParam {String} spelling_m 单词阳性拼写
+ * @apiParam {String} spelling_f 单词阴性拼写
  * @apiParam {String} phonetic 单词音标
  * @apiParam {Array} explainations 单词解释数组
  * @apiParam {Number} difficulty 难度：1为基础， 2为中级， 3为高级
+ * @apiParam {Number} primary_type_id 词性id
+ * @apiParam {String} primary_explaination 主要含义
  * @apiParamExample {json} 参数例子
   {
-	"spelling":"pomme",
-	"phonetic":"[pɔm]",
+	"spelling":"bas",
+	"spelling_m":"bas",
+	"spelling_f":"basse",
+	"phonetic":"[bɑ, -s]",
 	"difficulty":1,
+	"primary_type_id":7,
+	"primary_explaination":"低的, 矮的；浅的",
 	"explainations":[{
-		"type":"n.f.",
-		"explaination_cn":"苹果",
-		"sentence_fr":"On coupe cette pomme en quatre quartiers.",
-		"sentence_cn":"我们把苹果切成四份。",
+		"type_id":7,
+		"explaination_cn":"低的, 矮的；浅的",
+		"sentence_fr":"Il marche la tête basse.",
+		"sentence_cn":"他低着头走路。",
 		"sort":1
 	}]
 }
@@ -41,7 +49,9 @@ class WordsController extends Controller {
       "spelling",
       "phonetic",
       "explainations",
-      "difficulty"
+      "difficulty",
+      "primary_type_id",
+      "primary_explaination"
     );
 
     if (checkDataRes.is_pass) {
@@ -59,17 +69,51 @@ class WordsController extends Controller {
    * 
    * @apiParam {Number} id (可选：精准)用户ID
    * @apiParam {Number} difficulty 难度：1为基础， 2为中级， 3为高级(可选)
+   * @apiParam {Number} primary_type_id 主要词性id(可选)
    * @apiParam {String} keyword (可选：模糊)按spelling或者explaination_cn模糊搜索
    * @apiParam {Number} current(可选)当前页
    * @apiParam {Number} size(可选)每页个数
    * @apiSuccessExample
-{
+{{
     "code": 200,
     "msg": "成功操作",
     "data": [
         {
-            "id": 8,
+            "id": 2,
+            "spelling": "bas",
+            "spelling_m": "bas",
+            "spelling_f": "basse",
+            "phonetic": "[bɑ, -s]",
+            "image": null,
+            "audio": null,
+            "difficulty": 1,
+            "explainations": [
+                {
+                    "id": 2,
+                    "explaination_cn": "低的, 矮的；浅的",
+                    "sentence_fr": "Il marche la tête basse.",
+                    "sentence_cn": "他低着头走路。",
+                    "audio": null,
+                    "type": {
+                        "id": 7,
+                        "type_abbr": "adj.",
+                        "type": "Adjectif",
+                        "type_cn": "形容词"
+                    }
+                }
+            ],
+            "primary_type": {
+                "id": 7,
+                "type_abbr": "adj.",
+                "type": "Adjectif",
+                "type_cn": "形容词"
+            }
+        },
+        {
+            "id": 1,
             "spelling": "pomme",
+            "spelling_m": "",
+            "spelling_f": "",
             "phonetic": "[pɔm]",
             "image": null,
             "audio": null,
@@ -77,19 +121,25 @@ class WordsController extends Controller {
             "explainations": [
                 {
                     "id": 1,
-                    "type": "n.f.",
                     "explaination_cn": "苹果",
                     "sentence_fr": "On coupe cette pomme en quatre quartiers.",
                     "sentence_cn": "我们把苹果切成四份。",
-                    "audio": null
+                    "audio": null,
+                    "type": null
                 }
-            ]
+            ],
+            "primary_type": {
+                "id": 3,
+                "type_abbr": "n.f.",
+                "type": "Nom féminin",
+                "type_cn": "阴性名词"
+            }
         }
     ],
     "pagging": {
         "size": 10,
         "current": 1,
-        "total": 1
+        "total": 2
     }
 }
    * 
@@ -105,22 +155,31 @@ class WordsController extends Controller {
    * @apiGroup Words
    * @apiParam {Number} id 单词ID
    * @apiParam {String} spelling 单词
+   * @apiParam {String} spelling_m 单词阳性拼写
+   * @apiParam {String} spelling_f 单词阴性拼写
    * @apiParam {String} phonetic 单词音标
    * @apiParam {Array} explainations 单词解释数组
    * @apiParam {Number} difficulty 难度：1为基础， 2为中级， 3为高级
+   * @apiParam {Number} primary_type_id 词性id
+   * @apiParam {String} primary_explaination 主要含义
    * @apiParamExample {json} 参数例子
     {
-    "spelling":"pomme",
-    "phonetic":"[pɔm]",
-    "difficulty":1,
-    "explainations":[{
-      "type":"n.f.",
-      "explaination_cn":"苹果",
-      "sentence_fr":"On coupe cette pomme en quatre quartiers.",
-      "sentence_cn":"我们把苹果切成四份。",
-      "sort":1
-    }]
-  }
+      "id":2,
+      "spelling":"bas",
+      "spelling_m":"bas",
+      "spelling_f":"basse",
+      "phonetic":"[bɑ, -s]",
+      "difficulty":1,
+      "primary_type_id":7,
+      "primary_explaination":"低的, 矮的；浅的",
+      "explainations":[{
+        "type_id":7,
+        "explaination_cn":"低的, 矮的；浅的",
+        "sentence_fr":"Il marche la tête basse.",
+        "sentence_cn":"他低着头走路。",
+        "sort":1
+      }]
+    }
    * 
    */
   async update() {
@@ -128,6 +187,8 @@ class WordsController extends Controller {
     let checkDataRes = ctx.helper._checkData(
       ctx,
       "spelling",
+      "spelling_m",
+      "spelling_f",
       "phonetic",
       "explainations",
       "difficulty"

@@ -14,9 +14,24 @@ module.exports = (app) => {
         comment: "单词拼写",
         allowNull: false,
       },
+      spelling_m: {
+        type: STRING(255),
+        comment: "单词阳性拼写",
+        allowNull: false,
+      },
+      spelling_f: {
+        type: STRING(255),
+        comment: "单词阴性拼写",
+        allowNull: false,
+      },
       phonetic: {
         type: STRING(255),
         comment: "单词音标",
+        allowNull: true,
+      },
+      primary_explaination: {
+        type: STRING(255),
+        comment: "主要含义",
         allowNull: true,
       },
       difficulty:{
@@ -54,6 +69,10 @@ module.exports = (app) => {
       through: "vocabulary_and_books",
       foreignKey: "word_id",
       onDelete:"cascade"
+    });
+    app.model.Vocabulary.belongsTo(app.model.Types, {
+      foreignKey: "primary_type_id",
+      as:"primary_type"
     });
   }
   

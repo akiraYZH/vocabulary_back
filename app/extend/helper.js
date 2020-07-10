@@ -16,6 +16,7 @@ const {
   setToken,
 } = require("../utils/Token");
 const selectWithPagging = require("../utils/selectWithPagging");
+const fixObj = require("../utils/fixObj");
 
 module.exports = {
   _success,
@@ -32,5 +33,6 @@ module.exports = {
   decodeToken,
   updateToken,
   setToken,
-  selectWithPagging
+  selectWithPagging,
+  fixObj
 };

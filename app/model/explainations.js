@@ -9,11 +9,6 @@ module.exports = (app) => {
         autoIncrement: true,
         comment: "解释id",
       },
-      type: {
-        type: STRING(255),
-        comment: "词性",
-        allowNull: false,
-      },
       explaination_cn: {
         type: STRING(255),
         comment: "中文解释",
@@ -40,11 +35,11 @@ module.exports = (app) => {
         allowNull:false
       }
     },
-    {
-      //timestamp:true会自动创建created_at和updated_at字段
-      // timestamps: false
-    }
   );
+
+  Explainations.associate = function(){
+    app.model.Explainations.belongsTo(app.model.Types, {foreignKey:"type_id",as:"type"})
+  }
 
   return Explainations;
 };

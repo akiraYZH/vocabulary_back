@@ -44,9 +44,18 @@ module.exports = (app) => {
 
   // 单词书模块
   router.post("/api/books/add", controller.books.add);
+  router.post("/api/books/add-words", controller.books.addWords);
+  router.post("/api/books/remove-words", controller.books.removeWords);
   router.get("/api/books/get", controller.books.get);
+  router.get("/api/books/get-words", controller.books.getWords);
   router.put("/api/books/update", controller.books.update);
   router.delete("/api/books/del", controller.books.del);
+
+  // 词性模块
+  router.post("/api/types/add", controller.types.add);
+  router.get("/api/types/get", controller.types.get);
+  router.put("/api/types/update", controller.types.update);
+  router.delete("/api/types/del", controller.types.del);
 
   // 单词模块
   router.post("/api/words/add", controller.words.add);

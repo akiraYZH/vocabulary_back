@@ -37,7 +37,7 @@ class WordsService extends Service {
 
   async get(data) {
     const { ctx } = this;
-    const { Vocabulary, Explainations } = this.app.model;
+    const { Vocabulary, Explainations, Types } = this.app.model;
 
     try {
       let limit = Number(data.size) || 10;
@@ -58,27 +58,48 @@ class WordsService extends Service {
         attributes: [
           "id",
           "spelling",
+          "spelling_m",
+          "spelling_f",
           "phonetic",
           "image",
           "audio",
           "difficulty",
         ],
-        include: {
-          model: Explainations,
-          required: false,
-          attributes: [
-            "id",
-            "type",
-            "explaination_cn",
-            "sentence_fr",
-            "sentence_cn",
-            "audio",
-          ],
-          where: {
-            explaination_cn: { [Op.like]: `%${data.keyword_cn}%` },
+        include: [
+          {
+            model: Explainations,
+            required: false,
+            attributes: [
+              "id",
+              "explaination_cn",
+              "sentence_fr",
+              "sentence_cn",
+              "audio",
+            ],
+            where: {
+              explaination_cn: { [Op.like]: `%${data.keyword_cn}%` },
+            },
+            order: [["sort", "ASC"]],
+            include: {
+              model: Types,
+              required: false,
+              attributes: ["id", "type_abbr", "type", "type_cn"],
+              where: {
+                id: data.type_id,
+              },
+              as:"type"
+            },
           },
-          order: [["sord", "ASC"]],
-        },
+          {
+            model: Types,
+            required: false,
+            attributes: ["id", "type_abbr", "type", "type_cn"],
+            where: {
+              id: data.primary_type_id,
+            },
+            as:"primary_type"
+          },
+        ],
         where: {
           spelling: { [Op.like]: `%${data.keyword_fr}%` },
           id: data.id,
@@ -136,11 +157,11 @@ class WordsService extends Service {
       await transaction.commit();
 
       console.log(result);
-      
+
       if (result) {
         ctx.status = 200;
         return new ctx.helper._success();
-      }else{
+      } else {
         ctx.status = 200;
         return new ctx.helper._success("没有修改");
       }
