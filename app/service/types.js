@@ -1,6 +1,5 @@
-const sequelize = require("sequelize");
-const Op = require("sequelize").Op;
-const Service = require("egg").Service;
+'use strict';
+const Service = require('egg').Service;
 
 class TypesService extends Service {
   async add(data) {
@@ -17,7 +16,7 @@ class TypesService extends Service {
     // createPermission: [Function]
     const { Types } = this.app.model;
     try {
-      let newType = await Types.create(data);
+      const newType = await Types.create(data);
 
       if (newType) {
         ctx.status = 200;
@@ -31,25 +30,23 @@ class TypesService extends Service {
   }
 
 
-
   async get() {
     const { ctx } = this;
     const { Types } = this.app.model;
 
     try {
-      let result = await Types.findAll({
-        attributes: ["id", "type_abbr","type","type_cn"],
+      const result = await Types.findAll({
+        attributes: [ 'id', 'type_abbr', 'type', 'type_cn' ],
       });
-  
-      
+
 
       if (result.length) {
         ctx.status = 200;
         return new ctx.helper._success(result);
-      } else {
-        ctx.status = 200;
-        return new ctx.helper._error("暂无数据");
       }
+      ctx.status = 200;
+      return new ctx.helper._error('暂无数据');
+
     } catch (error) {
       console.log(error);
 
@@ -64,16 +61,16 @@ class TypesService extends Service {
     const { Types } = this.app.model;
 
     try {
-      let condition = { id: data.id };
-      let result = await Types.update(data, { where: condition });
+      const condition = { id: data.id };
+      const result = await Types.update(data, { where: condition });
 
       if (result[0] > 0) {
         ctx.status = 200;
         return new ctx.helper._success();
-      } else {
-        ctx.status = 200;
-        return new ctx.helper._success("没有修改");
       }
+      ctx.status = 200;
+      return new ctx.helper._success('没有修改');
+
     } catch (error) {
       ctx.status = 500;
       return new ctx.helper._error(error);
@@ -84,16 +81,16 @@ class TypesService extends Service {
     const { ctx } = this;
     const { Types } = this.app.model;
     try {
-      let condition = { id: data.id };
-      let result = await Types.destroy({ where: condition });
+      const condition = { id: data.id };
+      const result = await Types.destroy({ where: condition });
 
       if (result) {
         ctx.status = 200;
         return new ctx.helper._success();
-      } else {
-        ctx.status = 200;
-        return new ctx.helper._error("没有删除");
       }
+      ctx.status = 200;
+      return new ctx.helper._error('没有删除');
+
     } catch (error) {
       console.log(error);
 

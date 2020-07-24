@@ -1,6 +1,6 @@
-"use strict";
+'use strict';
 
-const Controller = require("egg").Controller;
+const Controller = require('egg').Controller;
 
 class AdminsController extends Controller {
   /**
@@ -24,17 +24,16 @@ class AdminsController extends Controller {
     const { ctx, service } = this;
     const checkDataRes = ctx.helper._checkData(
       ctx,
-      "account",
-      "password",
-      "email",
-      "role_id"
+      'account',
+      'password',
+      'email',
+      'role_id'
     );
 
     if (checkDataRes.is_pass) {
-      let body = ctx.request.body;
+      const body = ctx.request.body;
       ctx.body = await service.admins.add(body);
     } else {
-      ctx.status = 400;
       this.ctx.body = new this.ctx.helper._lack(checkDataRes.msg);
     }
   }
@@ -74,16 +73,56 @@ class AdminsController extends Controller {
  */
   async login() {
     const { ctx, service } = this;
-    const checkDataRes = ctx.helper._checkData(ctx, "account", "password");
+    const checkDataRes = ctx.helper._checkData(ctx, 'account', 'password');
     if (checkDataRes.is_pass) {
       // console.log(ctx.request.body);
-      let body = ctx.request.body;
+      const body = ctx.request.body;
       ctx.body = await service.admins.login(body);
     } else {
-      ctx.status = 400;
       this.ctx.body = new this.ctx.helper._lack(checkDataRes.msg);
     }
   }
+
+
+
+  /**
+ * @api {Post} /api/admin/login-token 用token登陆
+ * @apiGroup Admins
+ *
+ * @apiParam {Header} authentication token
+ *
+ * @apiSuccessExample  {json} 成功返回
+ {
+    "code": 200,
+    "msg": "成功操作",
+    "data": {
+        "id": 1,
+        "account": "akira",
+        "email": "664753092@qq.com",
+        "role": {
+            "id": 1,
+            "name": "admin",
+            "permissions": [
+                {
+                    "name": "home"
+                },
+                {
+                    "name": "about"
+                },
+                {
+                    "name": "test"
+                }
+            ]
+        }
+    }
+}
+ */
+async loginToken() {
+  const { ctx, service } = this;
+    ctx.body = await service.admins.loginToken();
+}
+
+
 
   /**
  * @api {Get} /api/admins/get 获得管理者列表
@@ -92,7 +131,7 @@ class AdminsController extends Controller {
  * @apiParam {String} keyword (可选：模糊)按account或者email模糊搜索
  * @apiParam {Number} current(可选)当前页
  * @apiParam {Number} size(可选)每页个数
- * 
+ *
  *
  * @apiSuccessExample  {json} 成功返回
 {
@@ -119,7 +158,7 @@ class AdminsController extends Controller {
 
   async get() {
     const { ctx, service } = this;
-    let query = ctx.query;
+    const query = ctx.query;
     ctx.body = await service.admins.get(query);
   }
 
@@ -127,7 +166,7 @@ class AdminsController extends Controller {
  * @api {Post} /api/admins/checkAccount 检查账户是否已经存在
  * @apiGroup Admins
  * @apiParam {String} account 管理者账号
- * 
+ *
  *
  * @apiSuccessExample  {json} 成功返回
   {
@@ -142,12 +181,12 @@ class AdminsController extends Controller {
  */
   async checkAccount() {
     const { ctx, service } = this;
-    let checkDataRes = ctx.helper._checkData(ctx, "account");
+    const checkDataRes = ctx.helper._checkData(ctx, 'account');
     if (checkDataRes.is_pass) {
-      let body = ctx.request.body;
+      const body = ctx.request.body;
       ctx.body = await service.admins.checkAccount(body);
     } else {
-      ctx.status =400;
+      ctx.status = 400;
       this.ctx.body = new this.ctx.helper._lack(checkDataRes.msg);
     }
   }
@@ -156,7 +195,7 @@ class AdminsController extends Controller {
  * @api {Post} /api/admins/check-email 检查账户是否已经存在
  * @apiGroup Admins
  * @apiParam {String} email 管理者邮箱
- * 
+ *
  *
  * @apiSuccessExample  {json} 成功返回
   {
@@ -171,12 +210,11 @@ class AdminsController extends Controller {
  */
   async checkEmail() {
     const { ctx, service } = this;
-    let checkDataRes = ctx.helper._checkData(ctx, "email");
+    const checkDataRes = ctx.helper._checkData(ctx, 'email');
     if (checkDataRes.is_pass) {
-      let body = ctx.request.body;
+      const body = ctx.request.body;
       ctx.body = await service.admins.checkEmail(body);
     } else {
-      ctx.status =400;
       this.ctx.body = new this.ctx.helper._lack(checkDataRes.msg);
     }
   }
@@ -188,7 +226,7 @@ class AdminsController extends Controller {
  * @apiParam {String} password 管理者密码()
  * @apiParam {String} email 管理者邮箱
  * @apiParam {String} role_id 角色id
- * 
+ *
  *
  * @apiSuccessExample  {json} 成功返回
 {
@@ -198,12 +236,11 @@ class AdminsController extends Controller {
  */
   async update() {
     const { ctx, service } = this;
-    let checkDataRes = ctx.helper._checkData(ctx, "id");
+    const checkDataRes = ctx.helper._checkData(ctx, 'id');
     if (checkDataRes.is_pass) {
-      let body = ctx.request.body;
+      const body = ctx.request.body;
       ctx.body = await service.admins.update(body);
     } else {
-      ctx.status = 400;
       ctx.body = new ctx.helper._lack(checkDataRes.msg);
     }
   }
@@ -212,7 +249,7 @@ class AdminsController extends Controller {
  * @api {Post} /api/admin/del 删除管理者
  * @apiGroup Admins
  * @apiParam {Number} id 管理者ID
- * 
+ *
  *
  * @apiSuccessExample  {json} 成功返回
  {
@@ -222,12 +259,11 @@ class AdminsController extends Controller {
  */
   async del() {
     const { ctx, service } = this;
-    let checkDataRes = ctx.helper._checkData(ctx, "id");
+    const checkDataRes = ctx.helper._checkData(ctx, 'id');
     if (checkDataRes.is_pass) {
-      let query = ctx.query;
+      const query = ctx.query;
       ctx.body = await service.admins.del(query);
     } else {
-      ctx.status = 400;
       ctx.body = ctx.helper._lack(checkDataRes.msg);
     }
   }

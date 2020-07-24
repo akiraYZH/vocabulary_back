@@ -1,6 +1,6 @@
-"use strict";
+'use strict';
 
-const Controller = require("egg").Controller;
+const Controller = require('egg').Controller;
 
 class TypesController extends Controller {
   /**
@@ -23,10 +23,10 @@ class TypesController extends Controller {
 
   async add() {
     const { ctx, service } = this;
-    const checkDataRes = ctx.helper._checkData(ctx, "type_abbr","type","type_cn");
+    const checkDataRes = ctx.helper._checkData(ctx, 'type_abbr', 'type', 'type_cn');
 
     if (checkDataRes.is_pass) {
-      let body = ctx.request.body;
+      const body = ctx.request.body;
       ctx.body = await service.types.add(body);
     } else {
       ctx.status = 400;
@@ -35,11 +35,10 @@ class TypesController extends Controller {
   }
 
 
-
   /**
    * @api {Get} /api/types/get 获得词性列表
    * @apiGroup Types
-   * 
+   *
    * @apiSuccessExample
    {
     "code": 200,
@@ -113,38 +112,38 @@ class TypesController extends Controller {
         }
     ]
 }
-   * 
+   *
    */
   async get() {
     const { ctx, service } = this;
     ctx.body = await service.types.get();
   }
 
-  
+
   /**
    * @api {Put} /api/types/update 更改词性
    * @apiGroup Types
    * @apiParam {String} type_abbr 词性缩写(可选)
    * @apiParam {String} type 词性全拼（可选）
    * @apiParam {String} type_cn 词性中文（可选）
-   * 
+   *
    * @apiSuccessExample
    {
     "code": 200,
     "msg": "成功操作"
 }
-   * 
+   *
    */
   async update() {
     const { ctx, service } = this;
-    let checkDataRes = ctx.helper._checkData(ctx, "id");
+    const checkDataRes = ctx.helper._checkData(ctx, 'id');
 
 
     if (checkDataRes.is_pass) {
-      let body = ctx.request.body;
+      const body = ctx.request.body;
       ctx.body = await service.types.update(body);
     } else {
-      ctx.status=400;
+      ctx.status = 400;
       ctx.body = new ctx.helper._lack(checkDataRes.msg);
     }
   }
@@ -152,7 +151,7 @@ class TypesController extends Controller {
  * @api {Delete} /api/types/del 删除词性
  * @apiGroup Types
  * @apiParam {Number} id 词性ID
- * 
+ *
  *
  * @apiSuccessExample  {json} 成功返回
   {
@@ -162,9 +161,9 @@ class TypesController extends Controller {
  */
   async del() {
     const { ctx, service } = this;
-    let checkDataRes = ctx.helper._checkData(ctx, "id");
+    const checkDataRes = ctx.helper._checkData(ctx, 'id');
     if (checkDataRes.is_pass) {
-      let query = ctx.query;
+      const query = ctx.query;
       ctx.body = await service.types.del(query);
     } else {
       ctx.body = ctx.helper._lack(checkDataRes.msg);

@@ -1,45 +1,46 @@
-module.exports = (app) => {
-  const { STRING, INTEGER, TEXT } = app.Sequelize;
+'use strict';
+module.exports = app => {
+  const { STRING, INTEGER } = app.Sequelize;
   const Explainations = app.model.define(
-    "explainations",
+    'explainations',
     {
       id: {
         type: INTEGER,
         primaryKey: true,
         autoIncrement: true,
-        comment: "解释id",
+        comment: '解释id',
       },
       explaination_cn: {
         type: STRING(255),
-        comment: "中文解释",
+        comment: '中文解释',
         allowNull: false,
       },
       sentence_fr: {
         type: STRING(255),
-        comment: "法语例句",
-        allowNull:true,
+        comment: '法语例句',
+        allowNull: true,
       },
-      audio:{
+      audio: {
         type: STRING(255),
-        comment: "法语句子音频",
-        allowNull:true,
+        comment: '法语句子音频',
+        allowNull: true,
       },
       sentence_cn: {
         type: STRING(255),
-        comment: "中文例句",
+        comment: '中文例句',
         allowNull: true,
       },
-      sort:{
-        type:INTEGER,
-        comment:"排序",
-        allowNull:false
-      }
-    },
+      sort: {
+        type: INTEGER,
+        comment: '排序',
+        allowNull: false,
+      },
+    }
   );
 
-  Explainations.associate = function(){
-    app.model.Explainations.belongsTo(app.model.Types, {foreignKey:"type_id",as:"type"})
-  }
+  Explainations.associate = function() {
+    app.model.Explainations.belongsTo(app.model.Types, { foreignKey: 'type_id', as: 'type' });
+  };
 
   return Explainations;
 };

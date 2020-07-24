@@ -1,5 +1,6 @@
-const Service = require("egg").Service;
-const Op = require("sequelize").Op;
+'use strict';
+const Service = require('egg').Service;
+const Op = require('sequelize').Op;
 
 class WordsService extends Service {
   async add(data) {
@@ -15,11 +16,11 @@ class WordsService extends Service {
     // removePermissions: [Function],
     // createPermission: [Function]
     const { Vocabulary, Explainations } = this.app.model;
-    //创建事务对象
-    let transaction = await this.ctx.model.transaction();
+    // 创建事务对象
+    const transaction = await this.ctx.model.transaction();
     try {
-      let newWord = await Vocabulary.create(data, { transaction });
-      let newExplainations = await Explainations.bulkCreate(
+      const newWord = await Vocabulary.create(data, { transaction });
+      const newExplainations = await Explainations.bulkCreate(
         data.explainations,
         { transaction }
       );
@@ -40,64 +41,64 @@ class WordsService extends Service {
     const { Vocabulary, Explainations, Types } = this.app.model;
 
     try {
-      let limit = Number(data.size) || 10;
-      let offset = Number(data.current)
+      const limit = Number(data.size) || 10;
+      const offset = Number(data.current)
         ? (Number(data.current) - 1) * limit
         : 0;
 
       if (data.keyword) {
         if (/^[a-zA-Z àâäèéêëîïôœùûüÿçÀÂÄÈÉÊËÎÏÔŒÙÛÜŸÇ]*$/.test(data.keyword)) {
-          //匹配法语
+          // 匹配法语
           data.keyword_fr = data.keyword;
         } else if (/^[a-zA-Z0-9_\u4e00-\u9fa5]+$/.test(data.keyword)) {
-          //匹配中文
+          // 匹配中文
           data.keyword_cn = data.keyword;
         }
       }
-      let result = await ctx.helper.selectWithPagging(Vocabulary, {
+      const result = await ctx.helper.selectWithPagging(Vocabulary, {
         attributes: [
-          "id",
-          "spelling",
-          "spelling_m",
-          "spelling_f",
-          "phonetic",
-          "image",
-          "audio",
-          "difficulty",
+          'id',
+          'spelling',
+          'spelling_m',
+          'spelling_f',
+          'phonetic',
+          'image',
+          'audio',
+          'difficulty',
         ],
         include: [
           {
             model: Explainations,
             required: false,
             attributes: [
-              "id",
-              "explaination_cn",
-              "sentence_fr",
-              "sentence_cn",
-              "audio",
+              'id',
+              'explaination_cn',
+              'sentence_fr',
+              'sentence_cn',
+              'audio',
             ],
             where: {
               explaination_cn: { [Op.like]: `%${data.keyword_cn}%` },
             },
-            order: [["sort", "ASC"]],
+            order: [[ 'sort', 'ASC' ]],
             include: {
               model: Types,
               required: false,
-              attributes: ["id", "type_abbr", "type", "type_cn"],
+              attributes: [ 'id', 'type_abbr', 'type', 'type_cn' ],
               where: {
                 id: data.type_id,
               },
-              as:"type"
+              as: 'type',
             },
           },
           {
             model: Types,
             required: false,
-            attributes: ["id", "type_abbr", "type", "type_cn"],
+            attributes: [ 'id', 'type_abbr', 'type', 'type_cn' ],
             where: {
               id: data.primary_type_id,
             },
-            as:"primary_type"
+            as: 'primary_type',
           },
         ],
         where: {
@@ -105,18 +106,18 @@ class WordsService extends Service {
           id: data.id,
           difficulty: data.difficulty,
         },
-        order: [["spelling", "ASC"]],
-        limit: limit,
-        offset: offset,
+        order: [[ 'spelling', 'ASC' ]],
+        limit,
+        offset,
       });
 
       if (result.data.length) {
         ctx.status = 200;
         return Object.assign(new ctx.helper._success(), result);
-      } else {
-        ctx.status = 200;
-        return new ctx.helper._error("暂无数据");
       }
+      ctx.status = 200;
+      return new ctx.helper._error('暂无数据');
+
     } catch (error) {
       console.log(error);
 
@@ -128,26 +129,26 @@ class WordsService extends Service {
   async update(data) {
     const { ctx } = this;
     const { Vocabulary, Explainations } = this.app.model;
-    let updateExplainations = false;
 
-    let transaction = await this.ctx.model.transaction();
+
+    const transaction = await this.ctx.model.transaction();
 
     try {
-      let condition = { id: data.id };
-      let word = await Vocabulary.findOne({ where: condition });
-
-      let result = await word.update(data, { transaction });
+      const condition = { id: data.id };
+      const word = await Vocabulary.findOne({ where: condition });
+      let updateExplainations = false;
+      const result = await word.update(data, { transaction });
 
       if (data.explainations) {
         updateExplainations = true;
-        let wordExplainations = await word.getExplainations();
-        //先清空
+        const wordExplainations = await word.getExplainations();
+        // 先清空
         wordExplainations.forEach(
-          async (explaination) => await explaination.destroy({ transaction })
+          async explaination => await explaination.destroy({ transaction })
         );
 
-        //再插入
-        let newExplainations = await Explainations.bulkCreate(
+        // 再插入
+        const newExplainations = await Explainations.bulkCreate(
           data.explainations,
           { transaction }
         );
@@ -158,13 +159,13 @@ class WordsService extends Service {
 
       console.log(result);
 
-      if (result) {
+      if (result || updateExplainations) {
         ctx.status = 200;
         return new ctx.helper._success();
-      } else {
-        ctx.status = 200;
-        return new ctx.helper._success("没有修改");
       }
+      ctx.status = 200;
+      return new ctx.helper._success('没有修改');
+
     } catch (error) {
       transaction.rollback();
       ctx.status = 500;
@@ -176,16 +177,16 @@ class WordsService extends Service {
     const { ctx } = this;
     const { Vocabulary } = this.app.model;
     try {
-      let condition = { id: data.id };
-      let result = await Vocabulary.destroy({ where: condition });
+      const condition = { id: data.id };
+      const result = await Vocabulary.destroy({ where: condition });
 
       if (result) {
         ctx.status = 200;
         return new ctx.helper._success();
-      } else {
-        ctx.status = 200;
-        return new ctx.helper._error("没有删除");
       }
+      ctx.status = 200;
+      return new ctx.helper._error('没有删除');
+
     } catch (error) {
       console.log(error);
 

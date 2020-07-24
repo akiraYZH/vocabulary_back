@@ -1,5 +1,6 @@
-const Service = require("egg").Service;
-const Op = require("sequelize").Op;
+'use strict';
+const Service = require('egg').Service;
+const Op = require('sequelize').Op;
 
 class AdminsService extends Service {
   async add(data) {
@@ -7,7 +8,7 @@ class AdminsService extends Service {
     const { Admins } = this.app.model;
 
     try {
-      let newAdmin = await Admins.create(data);
+      const newAdmin = await Admins.create(data);
 
       if (newAdmin) {
         ctx.status = 200;
@@ -22,16 +23,16 @@ class AdminsService extends Service {
 
   async get(data) {
     const { ctx } = this;
-    const { Admins, Roles, Permissions } = this.app.model;
+    const { Admins, Roles } = this.app.model;
 
     try {
-      let limit = Number(data.size) || 10;
-      let offset = Number(data.current)
+      const limit = Number(data.size) || 10;
+      const offset = Number(data.current)
         ? (Number(data.current) - 1) * limit
         : 0;
 
-      let result = await ctx.helper.selectWithPagging(Admins, {
-        attributes: ["id", "account", "email", "password"],
+      const result = await ctx.helper.selectWithPagging(Admins, {
+        attributes: [ 'id', 'account', 'email', 'password' ],
         where: {
           id: data.id,
           [Op.or]: {
@@ -41,21 +42,21 @@ class AdminsService extends Service {
         },
         include: {
           model: Roles,
-          attributes: ["id", "name"],
+          attributes: [ 'id', 'name' ],
           required: false,
-          as: "role",
+          as: 'role',
         },
-        offset: offset,
-        limit: limit,
+        offset,
+        limit,
       });
 
       if (result.data.length) {
         ctx.status = 200;
         return Object.assign(new ctx.helper._success(), result);
-      } else {
-        ctx.status = 200;
-        return new ctx.helper._success("暂无数据");
       }
+      ctx.status = 200;
+      return new ctx.helper._success('暂无数据');
+
     } catch (error) {
       console.log(error);
 
@@ -70,7 +71,7 @@ class AdminsService extends Service {
 
     try {
       const loginRes = await Admins.findOne({
-        attributes: ["id", "account", "email"],
+        attributes: [ 'id', 'account', 'email' ],
         where: {
           account: data.account,
           password: data.password,
@@ -78,36 +79,51 @@ class AdminsService extends Service {
         include: {
           model: Roles,
           required: false,
-          attributes: ["id", "name"],
-          as: "role",
+          attributes: [ 'id', 'name' ],
+          as: 'role',
           include: {
             model: Permissions,
             required: false,
-            as: "permissions",
-            attributes: ["name"],
+            as: 'permissions',
+            attributes: [ 'name' ],
           },
         },
       });
 
       if (loginRes) {
-        let router = [];
-        loginRes.role.permissions.forEach((permission) => {
+        const router = [];
+        loginRes.role.permissions.forEach(permission => {
           router.push(permission.name);
         });
 
         delete loginRes.role.dataValues.permissions;
         loginRes.role.dataValues.router = router;
 
-        let token = ctx.helper.addToken({ account: loginRes.account });
-        ctx.helper._setRedis(loginRes.account, loginRes);
+        const token = ctx.helper.addToken({ account: loginRes.account });
+        ctx.helper._setRedis("admin_"+loginRes.account, loginRes);
         ctx.helper.setToken(ctx.res, token);
 
         ctx.status = 200;
         return new ctx.helper._success(loginRes);
-      } else {
-        ctx.status = 400;
-        return new ctx.helper._error("账号或密码错误");
       }
+      return new ctx.helper._error('账号或密码错误');
+
+    } catch (error) {
+      console.log(error);
+
+      ctx.status = 500;
+      return new ctx.helper._error(error);
+    }
+  }
+
+  async loginToken(data) {
+    const { ctx } = this;
+
+    try {
+      let token = ctx.headers.authentication;
+      let result = await ctx.helper._getRedis("admin_"+ctx.helper.decodeToken(token).account);
+      return new ctx.helper._success(result);
+
     } catch (error) {
       console.log(error);
 
@@ -121,17 +137,16 @@ class AdminsService extends Service {
     const { Admins } = this.app.model;
 
     try {
-      let condition = { id: data.id };
+      const condition = { id: data.id };
       delete data.id;
-      let result = await Admins.update(data, { where: condition });
+      const result = await Admins.update(data, { where: condition });
 
       if (result[0] > 0) {
         ctx.status = 200;
         return new ctx.helper._success();
-      } else {
-        ctx.status = 400;
-        return new ctx.helper._error("没有修改");
       }
+      return new ctx.helper._error('没有修改');
+
     } catch (error) {
       ctx.status = 500;
       return new ctx.helper._error(error);
@@ -142,17 +157,17 @@ class AdminsService extends Service {
     const { ctx } = this;
     const { Admins } = this.app.model;
     try {
-      let condition = { id: data.id };
-      let result = await Admins.destroy({ where: condition });
+      const condition = { id: data.id };
+      const result = await Admins.destroy({ where: condition });
       console.log(result);
 
       if (result) {
         ctx.status = 200;
         return new ctx.helper._success();
-      } else {
-        ctx.status = 200;
-        return new ctx.helper._error("没有删除");
       }
+      ctx.status = 200;
+      return new ctx.helper._error('没有删除');
+
     } catch (error) {
       console.log(error);
 
@@ -166,16 +181,16 @@ class AdminsService extends Service {
     const { Admins } = this.app.model;
 
     try {
-      let condition = { account: data.account };
-      let result = await Admins.findOne({ where: condition });
+      const condition = { account: data.account };
+      const result = await Admins.findOne({ where: condition });
 
       if (!result) {
         ctx.status = 200;
-        return new ctx.helper._success("此账号可以使用");
-      } else {
-        ctx.status = 400;
-        return new ctx.helper._existed("此账号已被占用");
+        return new ctx.helper._success('此账号可以使用');
       }
+      ctx.status = 200;
+      return new ctx.helper._existed('此账号已被占用');
+
     } catch (error) {
       ctx.status = 500;
       return new ctx.helper._error(error);
@@ -187,16 +202,16 @@ class AdminsService extends Service {
     const { Admins } = this.app.model;
 
     try {
-      let condition = { email: data.email };
-      let result = await Admins.findOne({ where: condition });
+      const condition = { email: data.email };
+      const result = await Admins.findOne({ where: condition });
 
       if (!result) {
         ctx.status = 200;
-        return new ctx.helper._success("此邮箱可以使用");
-      } else {
-        ctx.status = 400;
-        return new ctx.helper._existed("此邮箱已被占用");
+        return new ctx.helper._success('此邮箱可以使用');
       }
+      ctx.status = 200;
+      return new ctx.helper._existed('此邮箱已被占用');
+
     } catch (error) {
       ctx.status = 500;
       return new ctx.helper._error(error);

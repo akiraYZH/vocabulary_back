@@ -1,6 +1,6 @@
-"use strict";
+'use strict';
 
-const Controller = require("egg").Controller;
+const Controller = require('egg').Controller;
 
 class BooksController extends Controller {
   /**
@@ -21,10 +21,10 @@ class BooksController extends Controller {
 
   async add() {
     const { ctx, service } = this;
-    const checkDataRes = ctx.helper._checkData(ctx, "title");
+    const checkDataRes = ctx.helper._checkData(ctx, 'title');
 
     if (checkDataRes.is_pass) {
-      let body = ctx.request.body;
+      const body = ctx.request.body;
       ctx.body = await service.books.add(body);
     } else {
       ctx.status = 400;
@@ -51,10 +51,10 @@ class BooksController extends Controller {
 
   async addWords() {
     const { ctx, service } = this;
-    const checkDataRes = ctx.helper._checkData(ctx, "id", "words");
+    const checkDataRes = ctx.helper._checkData(ctx, 'id', 'words');
 
     if (checkDataRes.is_pass) {
-      let body = ctx.request.body;
+      const body = ctx.request.body;
       ctx.body = await service.books.addWords(body);
     } else {
       ctx.status = 400;
@@ -62,7 +62,7 @@ class BooksController extends Controller {
     }
   }
 
-   /**
+  /**
  * @api {Post} /api/books/remove-words 为单词书去除单词
  * @apiGroup Books
  * @apiParam {Number} id 单词书ID
@@ -79,23 +79,23 @@ class BooksController extends Controller {
 }
  */
 
-async removeWords() {
-  const { ctx, service } = this;
-  const checkDataRes = ctx.helper._checkData(ctx, "id", "words");
+  async removeWords() {
+    const { ctx, service } = this;
+    const checkDataRes = ctx.helper._checkData(ctx, 'id', 'words');
 
-  if (checkDataRes.is_pass) {
-    let body = ctx.request.body;
-    ctx.body = await service.books.removeWords(body);
-  } else {
-    ctx.status = 400;
-    this.ctx.body = new this.ctx.helper._lack(checkDataRes.msg);
+    if (checkDataRes.is_pass) {
+      const body = ctx.request.body;
+      ctx.body = await service.books.removeWords(body);
+    } else {
+      ctx.status = 400;
+      this.ctx.body = new this.ctx.helper._lack(checkDataRes.msg);
+    }
   }
-}
 
   /**
    * @api {Get} /api/books/get 获得单词书列表
    * @apiGroup Books
-   * 
+   *
    * @apiSuccessExample
    {
     "code": 200,
@@ -108,7 +108,7 @@ async removeWords() {
         }
     ]
 }
-   * 
+   *
    */
   async get() {
     const { ctx, service } = this;
@@ -131,16 +131,16 @@ async removeWords() {
         }
     ]
 }
-   * 
+   *
    */
   async getWords() {
     const { ctx, service } = this;
-    let checkDataRes = ctx.helper._checkData(ctx, "id");
+    const checkDataRes = ctx.helper._checkData(ctx, 'id');
     if (checkDataRes.is_pass) {
-      let query = ctx.query;
+      const query = ctx.query;
       ctx.body = await service.books.getWords(query);
-    }else{
-      ctx.status=400;
+    } else {
+      ctx.status = 400;
       ctx.body = new ctx.helper._lack(checkDataRes.msg);
     }
   }
@@ -149,24 +149,24 @@ async removeWords() {
    * @apiGroup Books
    * @apiParam {Number} id 单词书ID
    * @apiParam {String} title 单词书名（可选）
-   * 
+   *
    * @apiSuccessExample
    {
     "code": 200,
     "msg": "成功操作"
 }
-   * 
+   *
    */
   async update() {
     const { ctx, service } = this;
-    let checkDataRes = ctx.helper._checkData(ctx, "id");
+    const checkDataRes = ctx.helper._checkData(ctx, 'id');
     console.log(123);
 
     if (checkDataRes.is_pass) {
-      let body = ctx.request.body;
+      const body = ctx.request.body;
       ctx.body = await service.books.update(body);
     } else {
-      ctx.status=400;
+      ctx.status = 400;
       ctx.body = new ctx.helper._lack(checkDataRes.msg);
     }
   }
@@ -174,7 +174,7 @@ async removeWords() {
  * @api {Delete} /api/books/del 删除管理者
  * @apiGroup Books
  * @apiParam {Number} id 书本ID
- * 
+ *
  *
  * @apiSuccessExample  {json} 成功返回
   {
@@ -184,9 +184,9 @@ async removeWords() {
  */
   async del() {
     const { ctx, service } = this;
-    let checkDataRes = ctx.helper._checkData(ctx, "id");
+    const checkDataRes = ctx.helper._checkData(ctx, 'id');
     if (checkDataRes.is_pass) {
-      let query = ctx.query;
+      const query = ctx.query;
       ctx.body = await service.books.del(query);
     } else {
       ctx.body = ctx.helper._lack(checkDataRes.msg);

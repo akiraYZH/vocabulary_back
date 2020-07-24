@@ -30,7 +30,7 @@ function updateToken(tokens){
 
 function setToken(res, token){
   // ctx.append('token',token);
-  res.setHeader('Authentication',token);
+  res.setHeader('authentication',token);
 }
 
 module.exports ={addToken, decodeToken, updateToken, setToken};

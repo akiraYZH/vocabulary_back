@@ -1,4 +1,5 @@
-const Service = require("egg").Service;
+'use strict';
+const Service = require('egg').Service;
 
 class RolesService extends Service {
   async add(data) {
@@ -15,13 +16,13 @@ class RolesService extends Service {
     // createPermission: [Function]
     const { Roles, Permissions } = this.app.model;
 
-    //创建事务对象
-    let transaction = await this.ctx.model.transaction();
+    // 创建事务对象
+    const transaction = await this.ctx.model.transaction();
     try {
-      let newRole = await Roles.create(data, { transaction });
+      const newRole = await Roles.create(data, { transaction });
 
       for (let i = 0; i < data.permissions.length; i++) {
-        let newPermission = await Permissions.create(
+        const newPermission = await Permissions.create(
           { name: data.permissions[i] },
           {
             transaction,
@@ -38,7 +39,7 @@ class RolesService extends Service {
         return new ctx.helper._success({ insertId: newRole.id });
       }
     } catch (error) {
-      //回滚
+      // 回滚
       console.log(error);
 
       await transaction.rollback();
@@ -52,21 +53,21 @@ class RolesService extends Service {
     const { Roles, Permissions } = this.app.model;
 
     try {
-      let result = await Roles.findAll({
-        attributes: ["id", "name"],
+      const result = await Roles.findAll({
+        attributes: [ 'id', 'name' ],
         include: {
           model: Permissions,
-          attributes: ["name"],
+          attributes: [ 'name' ],
           required: false,
-          as: "permissions",
+          as: 'permissions',
         },
       });
 
       console.log(result);
 
-      result.forEach((role) => {
-        let permissions = [];
-        role.permissions.forEach((item) => {
+      result.forEach(role => {
+        const permissions = [];
+        role.permissions.forEach(item => {
           permissions.push(item.name);
         });
         delete role.dataValues.permissions;
@@ -76,10 +77,10 @@ class RolesService extends Service {
       if (result.length) {
         ctx.status = 200;
         return new ctx.helper._success(result);
-      } else {
-        ctx.status = 200;
-        return new ctx.helper._success("暂无数据");
       }
+      ctx.status = 200;
+      return new ctx.helper._success('暂无数据');
+
     } catch (error) {
       console.log(error);
 
@@ -126,25 +127,26 @@ class RolesService extends Service {
     const { Roles, Permissions } = this.app.model;
     let updatePermissions = false;
 
-    let transaction = await this.ctx.model.transaction();
+    const transaction = await this.ctx.model.transaction();
 
     try {
-      let condition = { id: data.id };
-      let role = await Roles.findOne({ where: condition });
+      const condition = { id: data.id };
+      const role = await Roles.findOne({ where: condition });
 
-      let result = await role.update(data, { transaction });
+      const result = await role.update(data, { transaction });
 
       if (data.permissions) {
-        let rolePermissions = await role.getPermissions();
-        //先清空
+        updatePermissions = true;
+        const rolePermissions = await role.getPermissions();
+        // 先清空
         rolePermissions.forEach(
-          async (permission) => await permission.destroy({ transaction })
+          async permission => await permission.destroy({ transaction })
         );
 
-        //再插入
+        // 再插入
         for (let i = 0; i < data.permissions.length; i++) {
-          let permission = { name: data.permissions[i] };
-          let newPermission = await Permissions.create(permission, {
+          const permission = { name: data.permissions[i] };
+          const newPermission = await Permissions.create(permission, {
             transaction,
           });
           await role.addPermission(newPermission, { transaction });
@@ -152,14 +154,14 @@ class RolesService extends Service {
       }
 
       await transaction.commit();
-      if (result) {
-        
+      if (result || updatePermissions) {
+
         ctx.status = 200;
         return new ctx.helper._success();
-      }else{
-        ctx.status = 200;
-        return new ctx.helper._success("没有修改");
       }
+      ctx.status = 200;
+      return new ctx.helper._success('没有修改');
+
     } catch (error) {
       transaction.rollback();
       ctx.status = 500;
@@ -171,17 +173,17 @@ class RolesService extends Service {
     const { ctx } = this;
     const { Roles } = this.app.model;
     try {
-      let condition = { id: data.id };
-      let result = await Roles.destroy({ where: condition });
+      const condition = { id: data.id };
+      const result = await Roles.destroy({ where: condition });
       console.log(result);
 
       if (result) {
         ctx.status = 200;
         return new ctx.helper._success();
-      } else {
-        ctx.status = 200;
-        return new ctx.helper._error("没有删除");
       }
+      ctx.status = 200;
+      return new ctx.helper._error('没有删除');
+
     } catch (error) {
       console.log(error);
 

@@ -16,7 +16,7 @@ module.exports = appInfo => {
   config.keys = appInfo.name + '_1592361444817_6388';
 
   // add your middleware config here
-  config.middleware = ["checkToken"];
+  config.middleware = ["cors"];
   // add your user config here
   const userConfig = {
     // myAppName: 'egg',

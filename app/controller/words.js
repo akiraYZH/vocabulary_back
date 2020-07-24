@@ -1,6 +1,6 @@
-"use strict";
+'use strict';
 
-const Controller = require("egg").Controller;
+const Controller = require('egg').Controller;
 
 class WordsController extends Controller {
   /**
@@ -46,16 +46,16 @@ class WordsController extends Controller {
     const { ctx, service } = this;
     const checkDataRes = ctx.helper._checkData(
       ctx,
-      "spelling",
-      "phonetic",
-      "explainations",
-      "difficulty",
-      "primary_type_id",
-      "primary_explaination"
+      'spelling',
+      'phonetic',
+      'explainations',
+      'difficulty',
+      'primary_type_id',
+      'primary_explaination'
     );
 
     if (checkDataRes.is_pass) {
-      let body = ctx.request.body;
+      const body = ctx.request.body;
       ctx.body = await service.words.add(body);
     } else {
       ctx.status = 400;
@@ -66,7 +66,7 @@ class WordsController extends Controller {
   /**
    * @api {Get} /api/words/get 获得单词列表
    * @apiGroup Words
-   * 
+   *
    * @apiParam {Number} id (可选：精准)用户ID
    * @apiParam {Number} difficulty 难度：1为基础， 2为中级， 3为高级(可选)
    * @apiParam {Number} primary_type_id 主要词性id(可选)
@@ -142,11 +142,11 @@ class WordsController extends Controller {
         "total": 2
     }
 }
-   * 
+   *
    */
   async get() {
     const { ctx, service } = this;
-    let query = ctx.query;
+    const query = ctx.query;
     ctx.body = await service.words.get(query);
   }
 
@@ -180,22 +180,22 @@ class WordsController extends Controller {
         "sort":1
       }]
     }
-   * 
+   *
    */
   async update() {
     const { ctx, service } = this;
-    let checkDataRes = ctx.helper._checkData(
+    const checkDataRes = ctx.helper._checkData(
       ctx,
-      "spelling",
-      "spelling_m",
-      "spelling_f",
-      "phonetic",
-      "explainations",
-      "difficulty"
+      'spelling',
+      'spelling_m',
+      'spelling_f',
+      'phonetic',
+      'explainations',
+      'difficulty'
     );
 
     if (checkDataRes.is_pass) {
-      let body = ctx.request.body;
+      const body = ctx.request.body;
       ctx.body = await service.words.update(body);
     } else {
       ctx.body = new ctx.helper._lack(checkDataRes.msg);
@@ -205,7 +205,7 @@ class WordsController extends Controller {
  * @api {Delete} /api/words/del 删除单词
  * @apiGroup Words
  * @apiParam {Number} id 单词ID
- * 
+ *
  *
  * @apiSuccessExample  {json} 成功返回
   {
@@ -215,9 +215,9 @@ class WordsController extends Controller {
  */
   async del() {
     const { ctx, service } = this;
-    let checkDataRes = ctx.helper._checkData(ctx, "id");
+    const checkDataRes = ctx.helper._checkData(ctx, 'id');
     if (checkDataRes.is_pass) {
-      let query = ctx.query;
+      const query = ctx.query;
       ctx.body = await service.words.del(query);
     } else {
       ctx.body = ctx.helper._lack(checkDataRes.msg);
