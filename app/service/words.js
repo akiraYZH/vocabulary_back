@@ -1,6 +1,6 @@
-'use strict';
-const Service = require('egg').Service;
-const Op = require('sequelize').Op;
+"use strict";
+const Service = require("egg").Service;
+const Op = require("sequelize").Op;
 
 class WordsService extends Service {
   async add(data) {
@@ -57,48 +57,49 @@ class WordsService extends Service {
       }
       const result = await ctx.helper.selectWithPagging(Vocabulary, {
         attributes: [
-          'id',
-          'spelling',
-          'spelling_m',
-          'spelling_f',
-          'phonetic',
-          'image',
-          'audio',
-          'difficulty',
+          "id",
+          "spelling",
+          "spelling_m",
+          "spelling_f",
+          "phonetic",
+          "image",
+          "audio",
+          "difficulty",
         ],
         include: [
           {
             model: Explainations,
             required: false,
             attributes: [
-              'id',
-              'explaination_cn',
-              'sentence_fr',
-              'sentence_cn',
-              'audio',
+              "id",
+              "explaination_cn",
+              "sentence_fr",
+              "sentence_cn",
+              "audio",
+              "sort",
             ],
             where: {
               explaination_cn: { [Op.like]: `%${data.keyword_cn}%` },
             },
-            order: [[ 'sort', 'ASC' ]],
+            order: [["sort", "ASC"]],
             include: {
               model: Types,
               required: false,
-              attributes: [ 'id', 'type_abbr', 'type', 'type_cn' ],
+              attributes: ["id", "type_abbr", "type", "type_cn"],
               where: {
                 id: data.type_id,
               },
-              as: 'type',
+              as: "type",
             },
           },
           {
             model: Types,
             required: false,
-            attributes: [ 'id', 'type_abbr', 'type', 'type_cn' ],
+            attributes: ["id", "type_abbr", "type", "type_cn"],
             where: {
               id: data.primary_type_id,
             },
-            as: 'primary_type',
+            as: "primary_type",
           },
         ],
         where: {
@@ -106,7 +107,7 @@ class WordsService extends Service {
           id: data.id,
           difficulty: data.difficulty,
         },
-        order: [[ 'spelling', 'ASC' ]],
+        order: [["spelling", "ASC"]],
         limit,
         offset,
       });
@@ -116,8 +117,7 @@ class WordsService extends Service {
         return Object.assign(new ctx.helper._success(), result);
       }
       ctx.status = 200;
-      return new ctx.helper._error('暂无数据');
-
+      return new ctx.helper._error("暂无数据");
     } catch (error) {
       console.log(error);
 
@@ -129,7 +129,6 @@ class WordsService extends Service {
   async update(data) {
     const { ctx } = this;
     const { Vocabulary, Explainations } = this.app.model;
-
 
     const transaction = await this.ctx.model.transaction();
 
@@ -144,7 +143,7 @@ class WordsService extends Service {
         const wordExplainations = await word.getExplainations();
         // 先清空
         wordExplainations.forEach(
-          async explaination => await explaination.destroy({ transaction })
+          async (explaination) => await explaination.destroy({ transaction })
         );
 
         // 再插入
@@ -164,8 +163,7 @@ class WordsService extends Service {
         return new ctx.helper._success();
       }
       ctx.status = 200;
-      return new ctx.helper._success('没有修改');
-
+      return new ctx.helper._success("没有修改");
     } catch (error) {
       transaction.rollback();
       ctx.status = 500;
@@ -185,8 +183,7 @@ class WordsService extends Service {
         return new ctx.helper._success();
       }
       ctx.status = 200;
-      return new ctx.helper._error('没有删除');
-
+      return new ctx.helper._error("没有删除");
     } catch (error) {
       console.log(error);
 

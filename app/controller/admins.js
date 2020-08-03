@@ -1,6 +1,6 @@
-'use strict';
+"use strict";
 
-const Controller = require('egg').Controller;
+const Controller = require("egg").Controller;
 
 class AdminsController extends Controller {
   /**
@@ -24,10 +24,10 @@ class AdminsController extends Controller {
     const { ctx, service } = this;
     const checkDataRes = ctx.helper._checkData(
       ctx,
-      'account',
-      'password',
-      'email',
-      'role_id'
+      "account",
+      "password",
+      "email",
+      "role_id"
     );
 
     if (checkDataRes.is_pass) {
@@ -73,7 +73,7 @@ class AdminsController extends Controller {
  */
   async login() {
     const { ctx, service } = this;
-    const checkDataRes = ctx.helper._checkData(ctx, 'account', 'password');
+    const checkDataRes = ctx.helper._checkData(ctx, "account", "password");
     if (checkDataRes.is_pass) {
       // console.log(ctx.request.body);
       const body = ctx.request.body;
@@ -82,8 +82,6 @@ class AdminsController extends Controller {
       this.ctx.body = new this.ctx.helper._lack(checkDataRes.msg);
     }
   }
-
-
 
   /**
  * @api {Post} /api/admin/login-token 用token登陆
@@ -117,12 +115,10 @@ class AdminsController extends Controller {
     }
 }
  */
-async loginToken() {
-  const { ctx, service } = this;
+  async loginToken() {
+    const { ctx, service } = this;
     ctx.body = await service.admins.loginToken();
-}
-
-
+  }
 
   /**
  * @api {Get} /api/admins/get 获得管理者列表
@@ -163,7 +159,7 @@ async loginToken() {
   }
 
   /**
- * @api {Post} /api/admins/checkAccount 检查账户是否已经存在
+ * @api {Post} /api/admins/check-account 检查账户是否已经存在
  * @apiGroup Admins
  * @apiParam {String} account 管理者账号
  *
@@ -181,7 +177,7 @@ async loginToken() {
  */
   async checkAccount() {
     const { ctx, service } = this;
-    const checkDataRes = ctx.helper._checkData(ctx, 'account');
+    const checkDataRes = ctx.helper._checkData(ctx, "account");
     if (checkDataRes.is_pass) {
       const body = ctx.request.body;
       ctx.body = await service.admins.checkAccount(body);
@@ -195,6 +191,7 @@ async loginToken() {
  * @api {Post} /api/admins/check-email 检查账户是否已经存在
  * @apiGroup Admins
  * @apiParam {String} email 管理者邮箱
+ * @apiParam {Number} id 要过滤的管理者id(可选)
  *
  *
  * @apiSuccessExample  {json} 成功返回
@@ -210,7 +207,7 @@ async loginToken() {
  */
   async checkEmail() {
     const { ctx, service } = this;
-    const checkDataRes = ctx.helper._checkData(ctx, 'email');
+    const checkDataRes = ctx.helper._checkData(ctx, "email");
     if (checkDataRes.is_pass) {
       const body = ctx.request.body;
       ctx.body = await service.admins.checkEmail(body);
@@ -236,7 +233,7 @@ async loginToken() {
  */
   async update() {
     const { ctx, service } = this;
-    const checkDataRes = ctx.helper._checkData(ctx, 'id');
+    const checkDataRes = ctx.helper._checkData(ctx, "id");
     if (checkDataRes.is_pass) {
       const body = ctx.request.body;
       ctx.body = await service.admins.update(body);
@@ -259,12 +256,12 @@ async loginToken() {
  */
   async del() {
     const { ctx, service } = this;
-    const checkDataRes = ctx.helper._checkData(ctx, 'id');
+    const checkDataRes = ctx.helper._checkData(ctx, "id");
     if (checkDataRes.is_pass) {
       const query = ctx.query;
       ctx.body = await service.admins.del(query);
     } else {
-      ctx.body = ctx.helper._lack(checkDataRes.msg);
+      ctx.body = new ctx.helper._lack(checkDataRes.msg);
     }
   }
 }

@@ -1,6 +1,6 @@
-'use strict';
+"use strict";
 
-const Controller = require('egg').Controller;
+const Controller = require("egg").Controller;
 
 class RolesController extends Controller {
   /**
@@ -8,7 +8,7 @@ class RolesController extends Controller {
  * @apiGroup Roles
  *
  * @apiParam {String} name 角色名
- *
+ * @apiParam {Array} permissions 权限标识符数组
  * @apiSuccessExample  {json} 成功返回
 {
     "code": 200,
@@ -21,7 +21,7 @@ class RolesController extends Controller {
 
   async add() {
     const { ctx, service } = this;
-    const checkDataRes = ctx.helper._checkData(ctx, 'name', 'permissions');
+    const checkDataRes = ctx.helper._checkData(ctx, "name", "permissions");
 
     if (checkDataRes.is_pass) {
       const body = ctx.request.body;
@@ -44,7 +44,7 @@ class RolesController extends Controller {
         {
             "id": 1,
             "name": "admin",
-            "_permissions": [
+            "router": [
                 "home",
                 "about"
             ]
@@ -59,7 +59,6 @@ class RolesController extends Controller {
 
     ctx.body = await service.roles.get();
   }
-
 
   /**
    * @api {Put} /api/roles/update 获得权限角色列表
@@ -77,7 +76,7 @@ class RolesController extends Controller {
    */
   async update() {
     const { ctx, service } = this;
-    const checkDataRes = ctx.helper._checkData(ctx, 'id');
+    const checkDataRes = ctx.helper._checkData(ctx, "id");
     console.log(123);
 
     if (checkDataRes.is_pass) {
@@ -86,8 +85,6 @@ class RolesController extends Controller {
     } else {
       ctx.body = new ctx.helper._lack(checkDataRes.msg);
     }
-
-
   }
   /**
  * @api {Delete} /api/roles/del 删除角色
@@ -103,7 +100,7 @@ class RolesController extends Controller {
  */
   async del() {
     const { ctx, service } = this;
-    const checkDataRes = ctx.helper._checkData(ctx, 'id');
+    const checkDataRes = ctx.helper._checkData(ctx, "id");
     if (checkDataRes.is_pass) {
       const query = ctx.query;
       ctx.body = await service.roles.del(query);

@@ -1,6 +1,6 @@
-'use strict';
+"use strict";
 
-const Controller = require('egg').Controller;
+const Controller = require("egg").Controller;
 
 class BooksController extends Controller {
   /**
@@ -21,13 +21,12 @@ class BooksController extends Controller {
 
   async add() {
     const { ctx, service } = this;
-    const checkDataRes = ctx.helper._checkData(ctx, 'title');
+    const checkDataRes = ctx.helper._checkData(ctx, "title");
 
     if (checkDataRes.is_pass) {
       const body = ctx.request.body;
       ctx.body = await service.books.add(body);
     } else {
-      ctx.status = 400;
       this.ctx.body = new this.ctx.helper._lack(checkDataRes.msg);
     }
   }
@@ -51,13 +50,12 @@ class BooksController extends Controller {
 
   async addWords() {
     const { ctx, service } = this;
-    const checkDataRes = ctx.helper._checkData(ctx, 'id', 'words');
+    const checkDataRes = ctx.helper._checkData(ctx, "id", "words");
 
     if (checkDataRes.is_pass) {
       const body = ctx.request.body;
       ctx.body = await service.books.addWords(body);
     } else {
-      ctx.status = 400;
       this.ctx.body = new this.ctx.helper._lack(checkDataRes.msg);
     }
   }
@@ -81,13 +79,12 @@ class BooksController extends Controller {
 
   async removeWords() {
     const { ctx, service } = this;
-    const checkDataRes = ctx.helper._checkData(ctx, 'id', 'words');
+    const checkDataRes = ctx.helper._checkData(ctx, "id", "words");
 
     if (checkDataRes.is_pass) {
       const body = ctx.request.body;
       ctx.body = await service.books.removeWords(body);
     } else {
-      ctx.status = 400;
       this.ctx.body = new this.ctx.helper._lack(checkDataRes.msg);
     }
   }
@@ -135,12 +132,11 @@ class BooksController extends Controller {
    */
   async getWords() {
     const { ctx, service } = this;
-    const checkDataRes = ctx.helper._checkData(ctx, 'id');
+    const checkDataRes = ctx.helper._checkData(ctx, "id");
     if (checkDataRes.is_pass) {
       const query = ctx.query;
       ctx.body = await service.books.getWords(query);
     } else {
-      ctx.status = 400;
       ctx.body = new ctx.helper._lack(checkDataRes.msg);
     }
   }
@@ -159,14 +155,13 @@ class BooksController extends Controller {
    */
   async update() {
     const { ctx, service } = this;
-    const checkDataRes = ctx.helper._checkData(ctx, 'id');
+    const checkDataRes = ctx.helper._checkData(ctx, "id");
     console.log(123);
 
     if (checkDataRes.is_pass) {
       const body = ctx.request.body;
       ctx.body = await service.books.update(body);
     } else {
-      ctx.status = 400;
       ctx.body = new ctx.helper._lack(checkDataRes.msg);
     }
   }
@@ -184,7 +179,7 @@ class BooksController extends Controller {
  */
   async del() {
     const { ctx, service } = this;
-    const checkDataRes = ctx.helper._checkData(ctx, 'id');
+    const checkDataRes = ctx.helper._checkData(ctx, "id");
     if (checkDataRes.is_pass) {
       const query = ctx.query;
       ctx.body = await service.books.del(query);
