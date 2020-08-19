@@ -32,14 +32,16 @@ class BooksController extends Controller {
   }
 
   /**
- * @api {Post} /api/books/add-words 为单词书增加单词
+ * @api {Post} /api/books/distribute-words 为单词书增加单词
  * @apiGroup Books
  * @apiParam {Number} id 单词书ID
- * @apiParam {Array} words 单词id的数组
+ * @apiParam {Array} toAdd 要增加的单词id的数组
+ * @apiParam {Array} toRemove 要去除的单词id的数组
  * @apiParamExample {json} 参数实例
 {
 	"id":2,
-	"words":[1,2]
+  "toAdd":[1,2],
+  "toRemove":[1,2],
 }
  * @apiSuccessExample  {json} 成功返回
 {
@@ -48,42 +50,13 @@ class BooksController extends Controller {
 }
  */
 
-  async addWords() {
+  async distributeWords() {
     const { ctx, service } = this;
-    const checkDataRes = ctx.helper._checkData(ctx, "id", "words");
+    const checkDataRes = ctx.helper._checkData(ctx, "id");
 
     if (checkDataRes.is_pass) {
       const body = ctx.request.body;
-      ctx.body = await service.books.addWords(body);
-    } else {
-      this.ctx.body = new this.ctx.helper._lack(checkDataRes.msg);
-    }
-  }
-
-  /**
- * @api {Post} /api/books/remove-words 为单词书去除单词
- * @apiGroup Books
- * @apiParam {Number} id 单词书ID
- * @apiParam {Array} words 要去除的单词id的数组
- * @apiParamExample {json} 参数实例
-{
-	"id":2,
-	"words":[1,2]
-}
- * @apiSuccessExample  {json} 成功返回
-{
-    "code": 200,
-    "msg": "成功操作"
-}
- */
-
-  async removeWords() {
-    const { ctx, service } = this;
-    const checkDataRes = ctx.helper._checkData(ctx, "id", "words");
-
-    if (checkDataRes.is_pass) {
-      const body = ctx.request.body;
-      ctx.body = await service.books.removeWords(body);
+      ctx.body = await service.books.distributeWords(body);
     } else {
       this.ctx.body = new this.ctx.helper._lack(checkDataRes.msg);
     }
@@ -113,18 +86,88 @@ class BooksController extends Controller {
   }
 
   /**
-   * @api {Get} /api/books/get-words 获得单词书含有的单词
+   * @api {Get} /api/books/get-words 获得单词书含有和不含有的单词
    * @apiGroup Books
    * @apiParam {Number} id 单词书ID
+   * @apiParam {String} keyword 关键词
    * @apiSuccessExample
    {
-    "code": 200,
+    "code": 1,
     "msg": "成功操作",
-    "data": [
+    "included": [
         {
             "id": 2,
-            "title": "基本词汇",
-            "count": 1
+            "spelling": "bas",
+            "primary_explaination": "低的, 矮的；浅的",
+            "phonetic": "[bɑ, -s]",
+            "difficulty": 1,
+            "image": null,
+            "audio": null
+        },
+        {
+            "id": 1,
+            "spelling": "pomme",
+            "primary_explaination": "苹果",
+            "phonetic": "[pɔm]",
+            "difficulty": 1,
+            "image": null,
+            "audio": null
+        }
+    ],
+    "unincluded": [
+        {
+            "id": 4,
+            "spelling": "a",
+            "primary_explaination": "a",
+            "phonetic": "a",
+            "difficulty": 1,
+            "image": null,
+            "audio": null
+        },
+        {
+            "id": 3,
+            "spelling": "ab",
+            "primary_explaination": "",
+            "phonetic": "a",
+            "difficulty": 1,
+            "image": null,
+            "audio": null
+        },
+        {
+            "id": 5,
+            "spelling": "b",
+            "primary_explaination": "",
+            "phonetic": "b",
+            "difficulty": 1,
+            "image": null,
+            "audio": null
+        },
+        {
+            "id": 7,
+            "spelling": "bb",
+            "primary_explaination": "",
+            "phonetic": "b",
+            "difficulty": 1,
+            "image": null,
+            "audio": null
+        },
+        {
+            "id": 8,
+            "spelling": "c",
+            "primary_explaination": "",
+            "phonetic": "c",
+            "difficulty": 1,
+            "image": null,
+            "audio": null
+        },
+        {
+            "id": 10,
+            "spelling": "ccc",
+            "primary_explaination": "",
+            "phonetic": "c",
+            "difficulty": 1,
+            "image": null,
+            "audio": null
         }
     ]
 }
@@ -140,6 +183,7 @@ class BooksController extends Controller {
       ctx.body = new ctx.helper._lack(checkDataRes.msg);
     }
   }
+
   /**
    * @api {Put} /api/books/update 更改单词书名称
    * @apiGroup Books

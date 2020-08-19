@@ -1,6 +1,7 @@
-'use strict';
+"use strict";
 
-const Controller = require('egg').Controller;
+const Controller = require("egg").Controller;
+const { uploadImg } = require("../utils/uploadImg");
 
 class WordsController extends Controller {
   /**
@@ -46,19 +47,18 @@ class WordsController extends Controller {
     const { ctx, service } = this;
     const checkDataRes = ctx.helper._checkData(
       ctx,
-      'spelling',
-      'phonetic',
-      'explainations',
-      'difficulty',
-      'primary_type_id',
-      'primary_explaination'
+      "spelling",
+      "phonetic",
+      "explainations",
+      "difficulty",
+      "primary_type_id",
+      "primary_explaination"
     );
 
     if (checkDataRes.is_pass) {
       const body = ctx.request.body;
       ctx.body = await service.words.add(body);
     } else {
-      ctx.status = 400;
       this.ctx.body = new this.ctx.helper._lack(checkDataRes.msg);
     }
   }
@@ -186,12 +186,12 @@ class WordsController extends Controller {
     const { ctx, service } = this;
     const checkDataRes = ctx.helper._checkData(
       ctx,
-      'spelling',
-      'spelling_m',
-      'spelling_f',
-      'phonetic',
-      'explainations',
-      'difficulty'
+      "spelling",
+      "spelling_m",
+      "spelling_f",
+      "phonetic",
+      "explainations",
+      "difficulty"
     );
 
     if (checkDataRes.is_pass) {
@@ -215,10 +215,51 @@ class WordsController extends Controller {
  */
   async del() {
     const { ctx, service } = this;
-    const checkDataRes = ctx.helper._checkData(ctx, 'id');
+    const checkDataRes = ctx.helper._checkData(ctx, "id");
     if (checkDataRes.is_pass) {
       const query = ctx.query;
       ctx.body = await service.words.del(query);
+    } else {
+      ctx.body = ctx.helper._lack(checkDataRes.msg);
+    }
+  }
+
+  /**
+ * @api {Post} /api/words/upload-img 上传图片
+ * @apiGroup Words
+ *
+ *
+ * @apiSuccessExample  {json} 成功返回
+  {
+      "code": 200,
+      "msg": "成功操作"
+  }
+ */
+  async uploadImg() {
+    const { ctx, service } = this;
+    ctx.body = await uploadImg(ctx.req, "words");
+  }
+
+  /**
+ * @api {Post} /api/words/img 改变单词url
+ * @apiGroup Words
+ * @apiParam {Number} id 单词ID
+ * @apiParam {String} oldImg 旧单词图片
+ * @apiParam {Number} newImg 新单词图片
+ *
+ *
+ * @apiSuccessExample  {json} 成功返回
+  {
+      "code": 200,
+      "msg": "成功操作"
+  }
+ */
+  async img() {
+    const { ctx, service } = this;
+    const checkDataRes = ctx.helper._checkData(ctx, "id", "newImg");
+    if (checkDataRes.is_pass) {
+      const body = ctx.request.body;
+      ctx.body = await service.words.img(body);
     } else {
       ctx.body = ctx.helper._lack(checkDataRes.msg);
     }

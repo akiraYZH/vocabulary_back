@@ -1,6 +1,7 @@
 "use strict";
 const Service = require("egg").Service;
 const Op = require("sequelize").Op;
+const { delImg } = require("../utils/uploadImg");
 
 class WordsService extends Service {
   async add(data) {
@@ -187,6 +188,41 @@ class WordsService extends Service {
     } catch (error) {
       console.log(error);
 
+      ctx.status = 500;
+      return new ctx.helper._error(error);
+    }
+  }
+
+  async img(data) {
+    const { ctx } = this;
+    const { Vocabulary } = this.app.model;
+
+    const transaction = await this.ctx.model.transaction();
+
+    try {
+      const condition = { id: data.id };
+      const word = await Vocabulary.findOne({ where: condition });
+
+      // const result = await word.update(data, { transaction });
+      console.log(word.image);
+      if (word.image) {
+        delImg(word.image, "words");
+      }
+
+      const result = await word.update({ image: data.newImg }, { transaction });
+
+      console.log(result);
+      await transaction.commit();
+
+      if (result) {
+        ctx.status = 200;
+        return new ctx.helper._success();
+      }
+      ctx.status = 200;
+      return new ctx.helper._success("没有修改");
+    } catch (error) {
+      console.log(error);
+      transaction.rollback();
       ctx.status = 500;
       return new ctx.helper._error(error);
     }
