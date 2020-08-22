@@ -1,6 +1,6 @@
-'use strict';
+"use strict";
 
-const Controller = require('egg').Controller;
+const Controller = require("egg").Controller;
 
 class UsersController extends Controller {
   /**
@@ -24,9 +24,9 @@ class UsersController extends Controller {
     const { ctx, service } = this;
     const checkDataRes = ctx.helper._checkData(
       ctx,
-      'account',
-      'password',
-      'email'
+      "account",
+      "password",
+      "email"
     );
 
     if (checkDataRes.is_pass) {
@@ -65,7 +65,7 @@ class UsersController extends Controller {
  */
   async login() {
     const { ctx, service } = this;
-    const checkDataRes = ctx.helper._checkData(ctx, 'account', 'password');
+    const checkDataRes = ctx.helper._checkData(ctx, "account", "password");
     if (checkDataRes.is_pass) {
       const body = ctx.request.body;
       ctx.body = await service.users.login(body);
@@ -130,7 +130,7 @@ class UsersController extends Controller {
  */
   async checkAccount() {
     const { ctx, service } = this;
-    const checkDataRes = ctx.helper._checkData(ctx, 'account');
+    const checkDataRes = ctx.helper._checkData(ctx, "account");
     if (checkDataRes.is_pass) {
       const body = ctx.request.body;
       ctx.body = await service.users.checkAccount(body);
@@ -159,7 +159,7 @@ class UsersController extends Controller {
  */
   async checkEmail() {
     const { ctx, service } = this;
-    const checkDataRes = ctx.helper._checkData(ctx, 'email');
+    const checkDataRes = ctx.helper._checkData(ctx, "email");
     if (checkDataRes.is_pass) {
       const body = ctx.request.body;
       ctx.body = await service.users.checkEmail(body);
@@ -168,7 +168,6 @@ class UsersController extends Controller {
       this.ctx.body = new this.ctx.helper._lack(checkDataRes.msg);
     }
   }
-
 
   /**
  * @api {Post} /api/users/chooseBook 修改用户
@@ -185,7 +184,7 @@ class UsersController extends Controller {
  */
   async chooseBook() {
     const { ctx, service } = this;
-    const checkDataRes = ctx.helper._checkData(ctx, 'id', 'book_id');
+    const checkDataRes = ctx.helper._checkData(ctx, "id", "book_id");
     if (checkDataRes.is_pass) {
       const body = ctx.request.body;
       ctx.body = await service.users.chooseBook(body);
@@ -194,7 +193,6 @@ class UsersController extends Controller {
       ctx.body = new ctx.helper._lack(checkDataRes.msg);
     }
   }
-
 
   /**
  * @api {Put} /api/users/update 修改用户
@@ -206,7 +204,7 @@ class UsersController extends Controller {
  * @apiParam {Array} learned_arr 已经学习的单词（可选）
  * @apiParam {Number} task_completed 每天任务：1:完成，0:未完成（可选）
  * @apiParam {Number} num_day 一天背诵个数可选）
- * @apiParam {Number}} now_book 单词书id
+ * @apiParam {Number} now_book 单词书id
  *
  *
  * @apiSuccessExample  {json} 成功返回
@@ -217,7 +215,7 @@ class UsersController extends Controller {
  */
   async update() {
     const { ctx, service } = this;
-    const checkDataRes = ctx.helper._checkData(ctx, 'id');
+    const checkDataRes = ctx.helper._checkData(ctx, "id");
     if (checkDataRes.is_pass) {
       const body = ctx.request.body;
       ctx.body = await service.users.update(body);
@@ -241,7 +239,7 @@ class UsersController extends Controller {
  */
   async del() {
     const { ctx, service } = this;
-    const checkDataRes = ctx.helper._checkData(ctx, 'id');
+    const checkDataRes = ctx.helper._checkData(ctx, "id");
     if (checkDataRes.is_pass) {
       const query = ctx.query;
       ctx.body = await service.users.del(query);
