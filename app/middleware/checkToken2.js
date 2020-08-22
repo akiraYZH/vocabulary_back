@@ -14,19 +14,13 @@ module.exports = (options, app) => {
       //  获取到token
       let res = decodeToken(token);
       if (res && res.exp <= new Date() / 1000) {
-          
         ctx.body = {
           msg: "token过期",
           code: -1,
         };
       } else {
-        // console.log(token);
-
         let newToken = updateToken(token);
         setToken(ctx.res, newToken);
-        // console.log(newToken);
-
-        // console.log(newTokens);
 
         ctx.body = {
           msg: "解析成功",
