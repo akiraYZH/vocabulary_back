@@ -7,12 +7,12 @@ class UsersController extends Controller {
  * @api {Post} /api/users/add 增加用户
  * @apiGroup Users
  *
- * @apiParam {String} account 用户账号
+ * @apiParam {String} nickname 用户账号
  * @apiParam {String} password 用户密码
  * @apiParam {String} email 用户邮箱
  * @apiSuccessExample  {json} 成功返回
  {
-    "code": 200,
+    "code": 1,
     "msg": "成功注册",
     "data": {
         "insertId": 38
@@ -24,7 +24,7 @@ class UsersController extends Controller {
     const { ctx, service } = this;
     const checkDataRes = ctx.helper._checkData(
       ctx,
-      "account",
+      "nickname",
       "password",
       "email"
     );
@@ -33,25 +33,24 @@ class UsersController extends Controller {
       const body = ctx.request.body;
       ctx.body = await service.users.add(body);
     } else {
-      ctx.status = 400;
       this.ctx.body = new this.ctx.helper._lack(checkDataRes.msg);
     }
   }
 
   /**
- * @api {Post} /api/user/login 登陆
+ * @api {Post} /api/users/login 登陆
  * @apiGroup Users
  *
- * @apiParam {String} account 用户账号
+ * @apiParam {String} email 用户账号
  * @apiParam {String} password 用户密码
  *
  * @apiSuccessExample  {json} 成功返回
  {
-    "code": 200,
+    "code": 1,
     "msg": "成功操作",
     "data": {
         "id": 1,
-        "account": "akira",
+        "nickname": "akira",
         "email": "664753092@qq.com",
         "not_learned_arr": null,
         "learned_arr": null,
@@ -65,12 +64,11 @@ class UsersController extends Controller {
  */
   async login() {
     const { ctx, service } = this;
-    const checkDataRes = ctx.helper._checkData(ctx, "account", "password");
+    const checkDataRes = ctx.helper._checkData(ctx, "email", "password");
     if (checkDataRes.is_pass) {
       const body = ctx.request.body;
       ctx.body = await service.users.login(body);
     } else {
-      ctx.status = 400;
       this.ctx.body = new this.ctx.helper._lack(checkDataRes.msg);
     }
   }
@@ -86,12 +84,12 @@ class UsersController extends Controller {
  *
  * @apiSuccessExample  {json} 成功返回
 {
-    "code": 200,
+    "code": 1,
     "msg": "成功操作",
     "data": [
         {
             "id": 1,
-            "account": "akira",
+            "nickname": "akira",
             "email": "664753092@qq.com",
             "password": "123456",
             "book": null
@@ -112,30 +110,29 @@ class UsersController extends Controller {
   }
 
   /**
- * @api {Post} /api/users/checkAccount 检查账户是否已经存在
+ * @api {Post} /api/users/checkNickname 检查昵称是否已经存在
  * @apiGroup Users
- * @apiParam {String} account 用户账号
+ * @apiParam {String} nickname 用户账号
  *
  *
  * @apiSuccessExample  {json} 成功返回
   {
-    "code": 200,
-    "msg": "此账号可以使用"
+    "code": 1,
+    "msg": "此昵称可以使用"
 }
 * @apiSuccessExample  {json} 失败返回
 {
-    "code": 400,
-    "msg": "此账号已被占用"
+    "code": 3,
+    "msg": "此昵称已被占用"
 }
  */
-  async checkAccount() {
+  async checkNickname() {
     const { ctx, service } = this;
-    const checkDataRes = ctx.helper._checkData(ctx, "account");
+    const checkDataRes = ctx.helper._checkData(ctx, "nickname");
     if (checkDataRes.is_pass) {
       const body = ctx.request.body;
-      ctx.body = await service.users.checkAccount(body);
+      ctx.body = await service.users.checkNickname(body);
     } else {
-      ctx.status = 400;
       this.ctx.body = new this.ctx.helper._lack(checkDataRes.msg);
     }
   }
@@ -148,12 +145,12 @@ class UsersController extends Controller {
  *
  * @apiSuccessExample  {json} 成功返回
   {
-    "code": 200,
+    "code": 1,
     "msg": "此邮箱可以使用"
 }
 * @apiSuccessExample  {json} 失败返回
 {
-    "code": 400,
+    "code": 3,
     "msg": "此邮箱已被占用"
 }
  */
@@ -164,7 +161,6 @@ class UsersController extends Controller {
       const body = ctx.request.body;
       ctx.body = await service.users.checkEmail(body);
     } else {
-      ctx.status = 400;
       this.ctx.body = new this.ctx.helper._lack(checkDataRes.msg);
     }
   }
@@ -178,7 +174,7 @@ class UsersController extends Controller {
  *
  * @apiSuccessExample  {json} 成功返回
 {
-    "code": 200,
+    "code": 1,
     "msg": "成功操作"
 }
  */
@@ -189,7 +185,6 @@ class UsersController extends Controller {
       const body = ctx.request.body;
       ctx.body = await service.users.chooseBook(body);
     } else {
-      ctx.status = 400;
       ctx.body = new ctx.helper._lack(checkDataRes.msg);
     }
   }
@@ -209,7 +204,7 @@ class UsersController extends Controller {
  *
  * @apiSuccessExample  {json} 成功返回
 {
-    "code": 200,
+    "code": 1
     "msg": "成功操作"
 }
  */
@@ -220,20 +215,19 @@ class UsersController extends Controller {
       const body = ctx.request.body;
       ctx.body = await service.users.update(body);
     } else {
-      ctx.status = 400;
       ctx.body = new ctx.helper._lack(checkDataRes.msg);
     }
   }
 
   /**
- * @api {Post} /api/admin/del 删除管理者
- * @apiGroup Admins
- * @apiParam {Number} id 管理者ID
+ * @api {Post} /api/users/del 删除用户
+ * @apiGroup Users
+ * @apiParam {Number} id 用户ID
  *
  *
  * @apiSuccessExample  {json} 成功返回
  {
-    "code": 200,
+    "code": 1,
     "msg": "成功操作"
 }
  */
@@ -244,7 +238,6 @@ class UsersController extends Controller {
       const query = ctx.query;
       ctx.body = await service.users.del(query);
     } else {
-      ctx.status = 400;
       ctx.body = ctx.helper._lack(checkDataRes.msg);
     }
   }

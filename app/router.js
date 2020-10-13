@@ -48,21 +48,16 @@ module.exports = (app) => {
   );
 
   // 用户模块
-  router.post("/api/users/add", checkToken, controller.users.add);
+  router.post("/api/users/add", controller.users.add);
   router.get("/api/users/get", checkToken, controller.users.get);
   router.put("/api/users/update", checkToken, controller.users.update);
   router.delete("/api/users/del", checkToken, controller.users.del);
-  router.post(
-    "/api/users/check-account",
-    checkToken,
-    controller.users.checkAccount
-  );
-  router.post(
-    "/api/users/check-email",
-    checkToken,
-    controller.users.checkEmail
-  );
+  router.post("/api/users/check-nickname", controller.users.checkNickname);
+  router.post("/api/users/check-email", controller.users.checkEmail);
   router.post("/api/users/login", controller.users.login);
+
+  router.get("/api/verify", controller.base.verify);
+  router.get("/api/verify_code", controller.base.verify_code);
 
   // 单词书模块
   router.post("/api/books/add", checkToken, controller.books.add);

@@ -52,6 +52,13 @@ module.exports = (appInfo) => {
     timezone: "+08:00",
   };
 
+  config.session = {
+    key: "SESSION_ID",
+    maxAge: 864000,
+    httpOnly: true,
+    encrypt: true,
+    renew: true, //延长会话有效期
+  };
   return {
     ...config,
     ...userConfig,

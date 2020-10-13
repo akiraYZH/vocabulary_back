@@ -1,5 +1,6 @@
 "use strict";
 const Service = require("egg").Service;
+const svgCaptcha = require("svg-captcha");
 const Op = require("sequelize").Op;
 
 class UsersService extends Service {
@@ -32,11 +33,11 @@ class UsersService extends Service {
         : 0;
 
       const result = await ctx.helper.selectWithPagging(Users, {
-        attributes: ["id", "account", "email", "password"],
+        attributes: ["id", "nickname", "email", "password"],
         where: {
           id: data.id,
           [Op.or]: {
-            account: { [Op.like]: `%${data.keyword}%` },
+            nickname: { [Op.like]: `%${data.keyword}%` },
             email: { [Op.like]: `%${data.keyword}%` },
           },
         },
@@ -72,7 +73,7 @@ class UsersService extends Service {
       const user = await Users.findOne({
         attributes: [
           "id",
-          "account",
+          "nickname",
           "email",
           "not_learned_arr",
           "learned_arr",
@@ -82,7 +83,7 @@ class UsersService extends Service {
           "last_login_time",
         ],
         where: {
-          account: data.account,
+          email: data.email,
           password: data.password,
         },
         include: {
@@ -185,20 +186,20 @@ class UsersService extends Service {
     }
   }
 
-  async checkAccount(data) {
+  async checkNickname(data) {
     const { ctx } = this;
     const { Users } = this.app.model;
 
     try {
-      const condition = { account: data.account };
+      const condition = { nickname: data.nickname };
       const result = await Users.findOne({ where: condition });
 
       if (!result) {
         ctx.status = 200;
-        return new ctx.helper._success("此账号可以使用");
+        return new ctx.helper._success("此昵称可以使用");
       }
       ctx.status = 200;
-      return new ctx.helper._existed("此账号已被占用");
+      return new ctx.helper._existed("此昵称已被占用");
     } catch (error) {
       ctx.status = 500;
       return new ctx.helper._error(error);
@@ -210,9 +211,14 @@ class UsersService extends Service {
     const { Users } = this.app.model;
 
     try {
-      const condition = { email: data.email, id: { [Op.ne]: data.id } };
-      const result = await Users.findOne({ where: condition });
+      let condition = null;
+      if (data.id) {
+        condition = { email: data.email, id: { [Op.ne]: data.id } };
+      } else {
+        condition = { email: data.email };
+      }
 
+      const result = await Users.findOne({ where: condition });
       if (!result) {
         ctx.status = 200;
         return new ctx.helper._success("此邮箱可以使用");

@@ -12,7 +12,8 @@
     "egg-sequelize": "^5.2.1",
     "jsonwebtoken": "^8.5.1",
     "mysql2": "^2.1.0",
-    "redis": "^3.0.2"
+    "redis": "^3.0.2",
+    "svg-captcha": "^1.4.0"
   },
   "devDependencies": {
     "autod": "^3.0.1",
