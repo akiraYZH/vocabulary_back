@@ -13,6 +13,9 @@ module.exports = (options, app) => {
     if (token) {
       //  获取到token
       let res = decodeToken(token);
+      console.log(token);
+      console.log(res);
+      console.log(res.exp, new Date() / 1000);
       if (res && res.exp <= new Date() / 1000) {
         ctx.body = {
           msg: "token过期",

@@ -1,6 +1,8 @@
 "use strict";
+
+const helper = require("../extend/helper");
+
 const Service = require("egg").Service;
-const svgCaptcha = require("svg-captcha");
 const Op = require("sequelize").Op;
 
 class UsersService extends Service {
@@ -98,8 +100,8 @@ class UsersService extends Service {
         await user.update({ last_login_time: Date.now() });
 
         // 保存到redis
-        const token = ctx.helper.addToken({ account: user.account });
-        ctx.helper._setRedis(user.account, user);
+        const token = ctx.helper.addToken({ email: user.email });
+        ctx.helper._setRedis(user.email, user);
         ctx.helper.setToken(ctx.res, token);
 
         ctx.status = 200;
@@ -123,6 +125,33 @@ class UsersService extends Service {
       const condition = { id: data.id };
       delete data.id;
       const result = await Users.update(data, { where: condition });
+
+      if (result[0] > 0) {
+        ctx.status = 200;
+        return new ctx.helper._success();
+      }
+      ctx.status = 200;
+      return new ctx.helper._error("没有修改");
+    } catch (error) {
+      console.log(error);
+
+      ctx.status = 500;
+      return new ctx.helper._error(error);
+    }
+  }
+
+  async changePass(data) {
+    const { ctx } = this;
+    const { Users } = this.app.model;
+
+    try {
+      const originalData = helper.decodeToken(data.auth);
+      console.log(originalData);
+      const condition = { email: originalData.email };
+      const result = await Users.update(
+        { password: data.password },
+        { where: condition }
+      );
 
       if (result[0] > 0) {
         ctx.status = 200;

@@ -16,6 +16,32 @@ class BaseController extends Controller {
     console.log(headersCC, "查看token的内容");
     ctx.body = headersCC;
   }
+
+  //获得忘记密码验证码,code发送到邮箱，存到session
+  async forgetVerify() {
+    const { ctx } = this;
+    const checkDataRes = ctx.helper._checkData(ctx, "email");
+
+    if (checkDataRes.is_pass) {
+      const query = ctx.request.query;
+      ctx.body = await this.service.base.forgetVerify(query);
+    } else {
+      this.ctx.body = new this.ctx.helper._lack(checkDataRes.msg);
+    }
+  }
+
+  //获得忘记密码验证码,code发送到邮箱，存到session
+  async forgetVerifyConfirm() {
+    const { ctx } = this;
+    const checkDataRes = ctx.helper._checkData(ctx, "code");
+
+    if (checkDataRes.is_pass) {
+      const query = ctx.request.query;
+      ctx.body = await this.service.base.forgetVerifyConfirm(query);
+    } else {
+      this.ctx.body = new this.ctx.helper._lack(checkDataRes.msg);
+    }
+  }
 }
 
 module.exports = BaseController;

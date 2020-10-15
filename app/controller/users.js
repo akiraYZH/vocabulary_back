@@ -220,6 +220,29 @@ class UsersController extends Controller {
   }
 
   /**
+ * @api {Put} /api/users/changePass 修改用户
+ * @apiGroup Users
+ * @apiParam {String} password 用户密码
+ * @apiParam {String} auth token值
+ *
+ *
+ * @apiSuccessExample  {json} 成功返回
+{
+    "code": 1
+    "msg": "成功操作"
+}
+ */
+  async changePass() {
+    const { ctx, service } = this;
+    const checkDataRes = ctx.helper._checkData(ctx, "password", "auth");
+    if (checkDataRes.is_pass) {
+      const body = ctx.request.body;
+      ctx.body = await service.users.changePass(body);
+    } else {
+      ctx.body = new ctx.helper._lack(checkDataRes.msg);
+    }
+  }
+  /**
  * @api {Post} /api/users/del 删除用户
  * @apiGroup Users
  * @apiParam {Number} id 用户ID

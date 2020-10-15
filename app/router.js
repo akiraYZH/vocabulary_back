@@ -51,13 +51,17 @@ module.exports = (app) => {
   router.post("/api/users/add", controller.users.add);
   router.get("/api/users/get", checkToken, controller.users.get);
   router.put("/api/users/update", checkToken, controller.users.update);
+  router.put("/api/users/change-pass", controller.users.changePass);
   router.delete("/api/users/del", checkToken, controller.users.del);
   router.post("/api/users/check-nickname", controller.users.checkNickname);
   router.post("/api/users/check-email", controller.users.checkEmail);
   router.post("/api/users/login", controller.users.login);
 
+  //验证码
   router.get("/api/verify", controller.base.verify);
   router.get("/api/verify_code", controller.base.verify_code);
+  router.get("/api/forget-verify", controller.base.forgetVerify);
+  router.get("/api/forget-verify-confirm", controller.base.forgetVerifyConfirm);
 
   // 单词书模块
   router.post("/api/books/add", checkToken, controller.books.add);
