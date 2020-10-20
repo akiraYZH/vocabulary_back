@@ -74,6 +74,42 @@ class UsersController extends Controller {
   }
 
   /**
+ * @api {Post} /api/users/login-token 用token登陆
+ * @apiGroup Users
+ *
+ * @apiParam {Header} authentication token
+ *
+ * @apiSuccessExample  {json} 成功返回
+ {
+    "code": 200,
+    "msg": "成功操作",
+    "data": {
+        "id": 1,
+        "account": "akira",
+        "email": "664753092@qq.com",
+        "role": {
+            "id": 1,
+            "name": "admin",
+            "permissions": [
+                {
+                    "name": "home"
+                },
+                {
+                    "name": "about"
+                },
+                {
+                    "name": "test"
+                }
+            ]
+        }
+    }
+}
+ */
+  async loginToken() {
+    const { ctx, service } = this;
+    ctx.body = await service.users.loginToken();
+  }
+  /**
  * @api {Get} /api/users/get 获得用户列表
  * @apiGroup Users
  * @apiParam {Number} id (可选：精准)用户ID

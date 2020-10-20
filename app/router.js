@@ -56,6 +56,11 @@ module.exports = (app) => {
   router.post("/api/users/check-nickname", controller.users.checkNickname);
   router.post("/api/users/check-email", controller.users.checkEmail);
   router.post("/api/users/login", controller.users.login);
+  router.post(
+    "/api/users/login-token",
+    checkToken,
+    controller.users.loginToken
+  );
 
   //验证码
   router.get("/api/verify", controller.base.verify);

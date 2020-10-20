@@ -1,4 +1,5 @@
-//总入口
+//去除对象中为空的属性
+//入口
 const fixObj = function (obj) {
   return fix(obj, obj);
 };

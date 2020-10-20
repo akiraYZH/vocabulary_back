@@ -101,7 +101,7 @@ class UsersService extends Service {
 
         // 保存到redis
         const token = ctx.helper.addToken({ email: user.email });
-        ctx.helper._setRedis(user.email, user);
+        ctx.helper._setRedis("user_" + user.email, user);
         ctx.helper.setToken(ctx.res, token);
 
         ctx.status = 200;
@@ -116,7 +116,23 @@ class UsersService extends Service {
       return new ctx.helper._error(error);
     }
   }
+  async loginToken(data) {
+    const { ctx } = this;
 
+    try {
+      let token = ctx.headers.authentication;
+      let result = await ctx.helper._getRedis(
+        "user_" + ctx.helper.decodeToken(token).email
+      );
+
+      return new ctx.helper._success(result);
+    } catch (error) {
+      console.log(error);
+
+      ctx.status = 500;
+      return new ctx.helper._error(error);
+    }
+  }
   async update(data) {
     const { ctx } = this;
     const { Users } = this.app.model;
