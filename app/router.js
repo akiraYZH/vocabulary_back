@@ -94,7 +94,8 @@ module.exports = (app) => {
   // 单词模块
   router.post("/api/words/add", checkToken, controller.words.add);
   router.post("/api/words/img", checkToken, controller.words.img);
-  router.get("/api/words/get", checkToken, controller.words.get);
+  router.get("/api/words/get", checkToken, controller.words.get); //后台获得列表
+  router.post("/api/words/get-words", checkToken, controller.words.getWords); //通过id数组获得单词详情
   router.put("/api/words/update", checkToken, controller.words.update);
   router.delete("/api/words/del", checkToken, controller.words.del);
   // 上传图片
