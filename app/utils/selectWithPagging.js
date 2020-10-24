@@ -1,7 +1,6 @@
 const selectWithPagging = async function (model, options) {
   let fixed = fixObj(options);
-
-  console.log(fixed);
+  fixed.distinct = true;
 
   let result = await model.findAndCountAll(fixed);
   let current = Number(options.offset) / Number(options.offset) + 1;
@@ -16,14 +15,10 @@ const selectWithPagging = async function (model, options) {
   };
   return res;
 
-
   //总入口
-  function fixObj(obj){
-    return fix(obj, obj)
+  function fixObj(obj) {
+    return fix(obj, obj);
   }
-
-
-
 
   //检查对象一层的属性
   function fix(obj, originalObj) {
@@ -62,14 +57,14 @@ const selectWithPagging = async function (model, options) {
       if (obj[attr] instanceof Array) {
         if (!obj[attr].length) {
           delete obj[attr];
-        }else{
-          obj[attr].forEach(item=>{
-            if(item instanceof Object&&!(item instanceof Array)){
+        } else {
+          obj[attr].forEach((item) => {
+            if (item instanceof Object && !(item instanceof Array)) {
               console.log("ok");
-              
+
               fix(item, originalObj);
             }
-          })
+          });
         }
       } else {
         if (attr != "model") {
@@ -94,7 +89,7 @@ const selectWithPagging = async function (model, options) {
           obj[attr].indexOf("null") != -1
         ) {
           delete obj[attr];
-          fix(originalObj,originalObj);
+          fix(originalObj, originalObj);
         }
       }
     }

@@ -31,6 +31,7 @@ module.exports = (app) => {
         allowNull: true,
       },
       learned_arr: { type: TEXT, comment: "学习过的单词", allowNull: true },
+      favorite_arr: { type: TEXT, comment: "收藏的单词", allowNull: true },
       task_today: { type: TEXT, comment: "今天要学习的单词", allowNull: true },
       task_completed: {
         type: INTEGER,

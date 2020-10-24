@@ -12,13 +12,15 @@ const {
 const extraCheck = (targetName, targetVal) => {
   if (Array.isArray(targetVal)) {
     //如果传进来的是数组
-    if(checkArrContentType(targetVal)){
+    if (targetVal.length === 0) {
+      return true;
+    }
+    if (checkArrContentType(targetVal)) {
       let aErrors = checkArr(targetVal);
-    return aErrors.length ? { is_pass: false, errors: aErrors } : true;
-    }else{
+      return aErrors.length ? { is_pass: false, errors: aErrors } : true;
+    } else {
       return false;
     }
-    
   } else {
     switch (targetName) {
       case "phone":
@@ -55,7 +57,7 @@ const extraCheck = (targetName, targetVal) => {
       //   return true;
       default:
         // return regNormal(targetVal);
-      return true;
+        return true;
     }
   }
 };
@@ -98,26 +100,22 @@ function checkArrContentType(arr) {
 const checkData = (ctx, ...targetArr) => {
   let dataObj = {};
 
-  if (ctx.method === "POST"||ctx.method === "PUT") {
+  if (ctx.method === "POST" || ctx.method === "PUT") {
     dataObj = ctx.request.body;
-  } else if (ctx.method === "GET"||ctx.method === "DELETE") {
+  } else if (ctx.method === "GET" || ctx.method === "DELETE") {
     dataObj = ctx.query;
   }
 
   for (k of targetArr) {
     if (dataObj[k] == undefined || null) {
-      // console.log(dataObj);
       return { is_pass: false, msg: `缺少必填参数${k}` };
     }
   }
-  
-  
+
   for (k in dataObj) {
-    // console.log(k);
     let res = extraCheck(k, dataObj[k]);
-    if (!res || res.is_pass == false) {
-     
-      
+
+    if (!res || res.is_pass === false) {
       if (typeof res == "boolean") {
         return { is_pass: false, msg: k };
       } else {

@@ -1,6 +1,7 @@
 "use strict";
 
 const helper = require("../extend/helper");
+const { includes } = require("../utils/rolesList");
 
 const Service = require("egg").Service;
 const Op = require("sequelize").Op;
@@ -51,6 +52,7 @@ class UsersService extends Service {
         },
         offset,
         limit,
+        distinct: true,
       });
 
       if (result.data.length) {
@@ -79,6 +81,7 @@ class UsersService extends Service {
           "email",
           "not_learned_arr",
           "learned_arr",
+          "favorite_arr",
           "task_today",
           "task_completed",
           "num_day",
@@ -97,7 +100,15 @@ class UsersService extends Service {
       });
 
       if (user) {
+        //更新上一次登陆时间
         await user.update({ last_login_time: Date.now() });
+
+        // 将下列字段从string变为array
+        user.dataValues.learned_arr = JSON.parse(user.dataValues.learned_arr);
+        user.dataValues.not_learned_arr = JSON.parse(
+          user.dataValues.not_learned_arr
+        );
+        user.dataValues.task_today = JSON.parse(user.dataValues.task_today);
 
         // 保存到redis
         const token = ctx.helper.addToken({ email: user.email });
@@ -129,6 +140,7 @@ class UsersService extends Service {
           "email",
           "not_learned_arr",
           "learned_arr",
+          "favorite_arr",
           "task_today",
           "task_completed",
           "num_day",
@@ -144,6 +156,26 @@ class UsersService extends Service {
           as: "book",
         },
       });
+
+      if (user) {
+        await user.update({ last_login_time: Date.now() });
+
+        // 将下列字段从string变为array
+        user.dataValues.learned_arr = JSON.parse(user.dataValues.learned_arr);
+        user.dataValues.not_learned_arr = JSON.parse(
+          user.dataValues.not_learned_arr
+        );
+        user.dataValues.task_today = JSON.parse(user.dataValues.task_today);
+
+        // 保存到redis
+        const token = ctx.helper.addToken({ email: user.email });
+        ctx.helper._setRedis("user_" + user.email, user);
+        ctx.helper.setToken(ctx.res, token);
+
+        ctx.status = 200;
+        return new ctx.helper._success(user);
+      }
+
       return new ctx.helper._success(user);
     } catch (error) {
       console.log(error);
@@ -204,13 +236,46 @@ class UsersService extends Service {
 
   async chooseBook(data) {
     const { ctx } = this;
-    const { Users } = this.app.model;
+    const { Users, Books, Vocabulary } = this.app.model;
 
     try {
+      const book = await Books.findOne({
+        where: {
+          id: data.book_id,
+        },
+        include: {
+          attributes: ["id"],
+          model: Vocabulary,
+          as: "words",
+        },
+      });
+
+      // 每天要背的单词数量如果比书的单词总量大， 取书的单词总量
+      const count =
+        data.num_day <= book.words.length ? data.num_day : book.words.length;
+
+      // 还没学习的单词id
+      const not_learned_arr = book.words.map((word) => word.id);
+
+      //今天要学习的单词id
+      const task_today = ctx.helper.getRandomArrayElements(
+        not_learned_arr,
+        count
+      );
+
+      // where的条件
       const condition = { id: data.id };
       delete data.id;
+
+      // 初始化数据
       const result = await Users.update(
-        { now_book: data.book_id },
+        {
+          now_book: data.book_id,
+          num_day: data.num_day,
+          not_learned_arr: JSON.stringify(not_learned_arr),
+          learned_arr: JSON.stringify([]),
+          task_today: JSON.stringify(task_today),
+        },
         { where: condition }
       );
 

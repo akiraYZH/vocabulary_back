@@ -205,6 +205,7 @@ class UsersController extends Controller {
  * @api {Post} /api/users/chooseBook 修改用户
  * @apiGroup Users
  * @apiParam {Number} id 用户ID
+ * @apiParam {Number} num_day 一天背诵单词个数
  * @apiParam {Number} book_id 单词书id
  *
  *
@@ -216,7 +217,7 @@ class UsersController extends Controller {
  */
   async chooseBook() {
     const { ctx, service } = this;
-    const checkDataRes = ctx.helper._checkData(ctx, "id", "book_id");
+    const checkDataRes = ctx.helper._checkData(ctx, "id", "book_id", "num_day");
     if (checkDataRes.is_pass) {
       const body = ctx.request.body;
       ctx.body = await service.users.chooseBook(body);

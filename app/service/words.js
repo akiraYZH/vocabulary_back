@@ -127,6 +127,67 @@ class WordsService extends Service {
     }
   }
 
+  async getWords(data) {
+    const { ctx } = this;
+    const { Vocabulary, Explainations, Types } = this.app.model;
+
+    try {
+      const result = await Vocabulary.findAll({
+        attributes: [
+          "id",
+          "spelling",
+          "spelling_m",
+          "spelling_f",
+          "phonetic",
+          "image",
+          "audio",
+          "difficulty",
+        ],
+        include: [
+          {
+            model: Explainations,
+            required: false,
+            attributes: [
+              "id",
+              "explaination_cn",
+              "sentence_fr",
+              "sentence_cn",
+              "audio",
+              "sort",
+            ],
+            include: {
+              model: Types,
+              required: false,
+              attributes: ["id", "type_abbr", "type", "type_cn"],
+              as: "type",
+            },
+          },
+          {
+            model: Types,
+            required: false,
+            attributes: ["id", "type_abbr", "type", "type_cn"],
+            as: "primary_type",
+          },
+        ],
+        where: {
+          id: data.id_arr,
+        },
+      });
+
+      if (result.length) {
+        ctx.status = 200;
+        return new ctx.helper._success(result);
+      }
+      ctx.status = 200;
+      return new ctx.helper._error("暂无数据");
+    } catch (error) {
+      console.log(error);
+
+      ctx.status = 500;
+      return new ctx.helper._error(error);
+    }
+  }
+
   async update(data) {
     const { ctx } = this;
     const { Vocabulary, Explainations } = this.app.model;

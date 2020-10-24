@@ -71,6 +71,7 @@ module.exports = (app) => {
       through: "vocabulary_and_books",
       foreignKey: "word_id",
       onDelete: "cascade",
+      as: "words",
     });
     app.model.Vocabulary.belongsTo(app.model.Types, {
       foreignKey: "primary_type_id",

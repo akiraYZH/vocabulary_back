@@ -17,6 +17,7 @@ const {
 } = require("../utils/Token");
 const selectWithPagging = require("../utils/selectWithPagging");
 const fixObj = require("../utils/fixObj");
+const getRandomArrayElements = require("../utils/getRandomArrayElements");
 
 module.exports = {
   _success,
@@ -34,5 +35,6 @@ module.exports = {
   updateToken,
   setToken,
   selectWithPagging,
-  fixObj
+  fixObj,
+  getRandomArrayElements,
 };
