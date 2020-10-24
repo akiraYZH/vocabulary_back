@@ -61,6 +61,11 @@ module.exports = (app) => {
     checkToken,
     controller.users.loginToken
   );
+  router.post(
+    "/api/users/choose-book",
+    checkToken,
+    controller.users.chooseBook
+  );
 
   //验证码
   router.get("/api/verify", controller.base.verify);
@@ -75,7 +80,7 @@ module.exports = (app) => {
     checkToken,
     controller.books.distributeWords
   );
-  router.get("/api/books/get", checkToken, controller.books.get);
+  router.get("/api/books/get", controller.books.get);
   router.get("/api/books/get-words", checkToken, controller.books.getWords);
   router.put("/api/books/update", checkToken, controller.books.update);
   router.delete("/api/books/del", checkToken, controller.books.del);

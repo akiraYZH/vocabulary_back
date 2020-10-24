@@ -118,14 +118,33 @@ class UsersService extends Service {
   }
   async loginToken(data) {
     const { ctx } = this;
+    const { Users, Books } = this.app.model;
 
     try {
       let token = ctx.headers.authentication;
-      let result = await ctx.helper._getRedis(
-        "user_" + ctx.helper.decodeToken(token).email
-      );
-
-      return new ctx.helper._success(result);
+      const user = await Users.findOne({
+        attributes: [
+          "id",
+          "nickname",
+          "email",
+          "not_learned_arr",
+          "learned_arr",
+          "task_today",
+          "task_completed",
+          "num_day",
+          "last_login_time",
+        ],
+        where: {
+          email: ctx.helper.decodeToken(token).email,
+        },
+        include: {
+          model: Books,
+          required: false,
+          attributes: ["id", "title"],
+          as: "book",
+        },
+      });
+      return new ctx.helper._success(user);
     } catch (error) {
       console.log(error);
 
