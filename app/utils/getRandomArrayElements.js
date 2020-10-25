@@ -6,8 +6,10 @@ module.exports = function getRandomArrayElements(arr, count) {
 
   while (selected_arr.length < count) {
     let index = Math.floor(_arr.length * Math.random());
+
     // 加到目标数组
     selected_arr.push(_arr.splice(index, 1)[0]);
   }
+
   return selected_arr;
 };

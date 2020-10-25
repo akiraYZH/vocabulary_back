@@ -1,5 +1,5 @@
 "use strict";
-
+const sequelize = require("sequelize");
 const helper = require("../extend/helper");
 const { includes } = require("../utils/rolesList");
 
@@ -94,7 +94,16 @@ class UsersService extends Service {
         include: {
           model: Books,
           required: false,
-          attributes: ["id", "title"],
+          attributes: [
+            "id",
+            "title",
+            [
+              sequelize.literal(
+                "(SELECT COUNT(*) FROM vocabulary_and_books, books WHERE books.id = vocabulary_and_books.book_id)"
+              ),
+              "count",
+            ],
+          ],
           as: "book",
         },
       });
@@ -152,7 +161,16 @@ class UsersService extends Service {
         include: {
           model: Books,
           required: false,
-          attributes: ["id", "title"],
+          attributes: [
+            "id",
+            "title",
+            [
+              sequelize.literal(
+                "(SELECT COUNT(*) FROM vocabulary_and_books, books WHERE books.id = vocabulary_and_books.book_id)"
+              ),
+              "count",
+            ],
+          ],
           as: "book",
         },
       });
@@ -191,6 +209,18 @@ class UsersService extends Service {
     try {
       const condition = { id: data.id };
       delete data.id;
+
+      //处理需要变成string的数据
+      if (data.not_learned_arr) {
+        data.not_learned_arr = JSON.stringify(data.not_learned_arr);
+      }
+      if (data.learned_arr) {
+        data.learned_arr = JSON.stringify(data.learned_arr);
+      }
+      if (data.task_today) {
+        data.task_today = JSON.stringify(data.task_today);
+      }
+
       const result = await Users.update(data, { where: condition });
 
       if (result[0] > 0) {
@@ -213,7 +243,7 @@ class UsersService extends Service {
 
     try {
       const originalData = helper.decodeToken(data.auth);
-      console.log(originalData);
+
       const condition = { email: originalData.email };
       const result = await Users.update(
         { password: data.password },
@@ -299,7 +329,6 @@ class UsersService extends Service {
     try {
       const condition = { id: data.id };
       const result = await Users.destroy({ where: condition });
-      console.log(result);
 
       if (result) {
         ctx.status = 200;
@@ -355,6 +384,90 @@ class UsersService extends Service {
       ctx.status = 200;
       return new ctx.helper._existed("此邮箱已被占用");
     } catch (error) {
+      ctx.status = 500;
+      return new ctx.helper._error(error);
+    }
+  }
+
+  async getExam(data) {
+    const { ctx } = this;
+    const { Vocabulary, Explainations, Types } = this.app.model;
+
+    try {
+      let result = await Vocabulary.findAll({
+        attributes: [
+          "id",
+          "spelling",
+          "spelling_m",
+          "spelling_f",
+          "phonetic",
+          "image",
+          "audio",
+          "difficulty",
+          "primary_explaination",
+        ],
+        include: [
+          // {
+          //   model: Explainations,
+          //   required: false,
+          //   attributes: [
+          //     "id",
+          //     "explaination_cn",
+          //     "sentence_fr",
+          //     "sentence_cn",
+          //     "audio",
+          //     "sort",
+          //   ],
+          //   include: {
+          //     model: Types,
+          //     required: false,
+          //     attributes: ["id", "type_abbr", "type", "type_cn"],
+          //     as: "type",
+          //   },
+          // },
+          {
+            model: Types,
+            required: false,
+            attributes: ["id", "type_abbr", "type", "type_cn"],
+            as: "primary_type",
+          },
+        ],
+        where: {
+          id: data.id_arr,
+        },
+      });
+
+      // 生成选项
+      let exam = [];
+      result.forEach((word) => {
+        // 过滤本身
+        let options = result.filter(
+          (item) => item.dataValues.id !== word.dataValues.id
+        );
+
+        let randomOptions = ctx.helper.getRandomArrayElements(options, 3);
+        let _randomOptions = randomOptions.map((item) => {
+          return {
+            id: item.dataValues.id,
+            image: item.dataValues.image,
+            primary_explaination: item.dataValues.primary_explaination,
+          };
+        });
+
+        console.log(_randomOptions);
+        exam.unshift(word.dataValues);
+        exam[0]["options"] = _randomOptions;
+      });
+
+      if (exam.length) {
+        ctx.status = 200;
+        return new ctx.helper._success(exam);
+      }
+      ctx.status = 200;
+      return new ctx.helper._error("暂无数据");
+    } catch (error) {
+      console.log(error);
+
       ctx.status = 500;
       return new ctx.helper._error(error);
     }

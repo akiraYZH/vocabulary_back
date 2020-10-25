@@ -66,6 +66,7 @@ module.exports = (app) => {
     checkToken,
     controller.users.chooseBook
   );
+  router.post("/api/users/get-exam", controller.users.getExam); //通过id数组获得测试
 
   //验证码
   router.get("/api/verify", controller.base.verify);

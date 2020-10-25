@@ -301,6 +301,93 @@ class UsersController extends Controller {
       ctx.body = ctx.helper._lack(checkDataRes.msg);
     }
   }
+
+  /**
+   * @api {Post} /api/users/get-exams 获得测试
+   * @apiGroup Users
+   *
+   * @apiParam {Array} id_arr 单词id
+   * @apiSuccessExample
+{{
+    "code": 200,
+    "msg": "成功操作",
+    "data": [
+        {
+            "id": 2,
+            "spelling": "bas",
+            "spelling_m": "bas",
+            "spelling_f": "basse",
+            "phonetic": "[bɑ, -s]",
+            "image": null,
+            "audio": null,
+            "difficulty": 1,
+            "explainations": [
+                {
+                    "id": 2,
+                    "explaination_cn": "低的, 矮的；浅的",
+                    "sentence_fr": "Il marche la tête basse.",
+                    "sentence_cn": "他低着头走路。",
+                    "audio": null,
+                    "type": {
+                        "id": 7,
+                        "type_abbr": "adj.",
+                        "type": "Adjectif",
+                        "type_cn": "形容词"
+                    }
+                }
+            ],
+            "primary_type": {
+                "id": 7,
+                "type_abbr": "adj.",
+                "type": "Adjectif",
+                "type_cn": "形容词"
+            }
+        },
+        {
+            "id": 1,
+            "spelling": "pomme",
+            "spelling_m": "",
+            "spelling_f": "",
+            "phonetic": "[pɔm]",
+            "image": null,
+            "audio": null,
+            "difficulty": 1,
+            "explainations": [
+                {
+                    "id": 1,
+                    "explaination_cn": "苹果",
+                    "sentence_fr": "On coupe cette pomme en quatre quartiers.",
+                    "sentence_cn": "我们把苹果切成四份。",
+                    "audio": null,
+                    "type": null
+                }
+            ],
+            "primary_type": {
+                "id": 3,
+                "type_abbr": "n.f.",
+                "type": "Nom féminin",
+                "type_cn": "阴性名词"
+            }
+        }
+    ],
+    "pagging": {
+        "size": 10,
+        "current": 1,
+        "total": 2
+    }
+}
+   *
+   */
+  async getExam() {
+    const { ctx, service } = this;
+    const checkDataRes = ctx.helper._checkData(ctx, "id_arr");
+    if (checkDataRes.is_pass) {
+      const body = ctx.request.body;
+      ctx.body = await service.users.getExam(body);
+    } else {
+      ctx.body = new this.ctx.helper._lack(checkDataRes.msg);
+    }
+  }
 }
 
 module.exports = UsersController;
