@@ -1,5 +1,5 @@
-'use strict';
-const Service = require('egg').Service;
+"use strict";
+const Service = require("egg").Service;
 
 class TypesService extends Service {
   async add(data) {
@@ -29,24 +29,21 @@ class TypesService extends Service {
     }
   }
 
-
   async get() {
     const { ctx } = this;
     const { Types } = this.app.model;
 
     try {
       const result = await Types.findAll({
-        attributes: [ 'id', 'type_abbr', 'type', 'type_cn' ],
+        attributes: ["id", "type_abbr", "type", "type_cn"],
       });
-
 
       if (result.length) {
         ctx.status = 200;
         return new ctx.helper._success(result);
       }
       ctx.status = 200;
-      return new ctx.helper._error('暂无数据');
-
+      return new ctx.helper._error("暂无数据");
     } catch (error) {
       console.log(error);
 
@@ -54,7 +51,6 @@ class TypesService extends Service {
       return new ctx.helper._error(error);
     }
   }
-
 
   async update(data) {
     const { ctx } = this;
@@ -69,8 +65,7 @@ class TypesService extends Service {
         return new ctx.helper._success();
       }
       ctx.status = 200;
-      return new ctx.helper._success('没有修改');
-
+      return new ctx.helper._success("没有修改");
     } catch (error) {
       ctx.status = 500;
       return new ctx.helper._error(error);
@@ -89,8 +84,7 @@ class TypesService extends Service {
         return new ctx.helper._success();
       }
       ctx.status = 200;
-      return new ctx.helper._error('没有删除');
-
+      return new ctx.helper._error("没有删除");
     } catch (error) {
       console.log(error);
 

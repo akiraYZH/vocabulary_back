@@ -1,12 +1,12 @@
-'use strict';
-const Service = require('egg').Service;
+"use strict";
+const Service = require("egg").Service;
 
 class CommonService extends Service {
   async get(db, param) {
     return await this.app.mysql.get(db, param);
   }
   // 查询全部
-  async select(db, param = '', columns = '') {
+  async select(db, param = "", columns = "") {
     const condition = {};
     param && (condition.where = param);
     columns && (condition.columns = columns);
@@ -30,10 +30,10 @@ class CommonService extends Service {
     joins = [],
   }) {
     const conditionArr = [];
-    let condition = '';
+    let condition = "";
     const searchArr = [];
-    let conditionSearch = '';
-    let sql = '';
+    let conditionSearch = "";
+    let sql = "";
     let page_now = 1;
     let num_in_page = 10;
     // 分页
@@ -53,46 +53,43 @@ class CommonService extends Service {
     // 联表处理
     if (!joins.length) {
       // 没有联表
-      console.log(columns);
 
       if (columns.length) {
-        sql = `SELECT ${columns.join(', ')} FROM ${db}`;
+        sql = `SELECT ${columns.join(", ")} FROM ${db}`;
       } else {
         sql = `SELECT * from ${db}`;
       }
     } else {
       // 联表
       if (columns.length) {
-        sql = `SELECT ${columns.join(', ')} FROM ${db} ${joins.join(' ')}`;
+        sql = `SELECT ${columns.join(", ")} FROM ${db} ${joins.join(" ")}`;
       } else {
-        sql = `SELECT * FROM ${db} ${joins.join(' ')}`;
+        sql = `SELECT * FROM ${db} ${joins.join(" ")}`;
       }
     }
     // 加上WHERE
-    sql += ' WHERE 1=1';
+    sql += " WHERE 1=1";
 
     if (param) {
-      console.log(param, 1234);
-
-      Object.keys(param).forEach(key => {
+      Object.keys(param).forEach((key) => {
         if (param[key] != null && param[key] !== undefined) {
           conditionArr.push(`${key} = '${param[key]}'`);
         }
       });
       if (conditionArr.length) {
-        condition = conditionArr.join(' AND ');
+        condition = conditionArr.join(" AND ");
         sql += ` AND ${condition}`;
       }
     }
 
     if (search) {
-      Object.keys(search).forEach(key => {
+      Object.keys(search).forEach((key) => {
         if (search[key] != null && search[key] !== undefined) {
           searchArr.push(`${key} LIKE '%${search[key]}%'`);
         }
       });
       if (searchArr.length) {
-        conditionSearch = searchArr.join(' OR ');
+        conditionSearch = searchArr.join(" OR ");
         sql += ` AND (${conditionSearch})`;
       }
     }
@@ -104,17 +101,14 @@ class CommonService extends Service {
     const sqlCount = sql;
 
     sql += ` LIMIT ${(page_now - 1) * num_in_page},${num_in_page}`;
-    console.log(sql);
 
     try {
       const result = await this.app.mysql.query(sql);
       const count = await this.app.mysql
         .query(sqlCount)
-        .then(res => res.length);
+        .then((res) => res.length);
 
       const page_total = Math.ceil(count / num_in_page);
-
-      console.log(count);
 
       return {
         is_success: true,
@@ -129,7 +123,6 @@ class CommonService extends Service {
   }
 
   async update(db, param = null, condition = null) {
-    // console.log(sql);
     try {
       return await this.app.mysql.update(db, param, { where: condition });
     } catch (e) {
@@ -137,7 +130,7 @@ class CommonService extends Service {
 
       return {
         affectedRows: 0,
-        msg: '请检查参数与参数格式',
+        msg: "请检查参数与参数格式",
       };
     }
   }
@@ -145,16 +138,12 @@ class CommonService extends Service {
   // 多次插入
   async multiInsert(db, list) {
     const conn = await this.app.mysql.beginTransaction();
-    // console.log(sql);
+
     let hasError = false;
     for (let i = 0; i < list.length; i++) {
       try {
         const res = await conn.insert(db, list[i]);
-        console.log(db);
-
-        console.log(res);
       } catch (e) {
-        console.log(e, 123);
 
         hasError = true;
         await conn.rollback();
@@ -168,24 +157,23 @@ class CommonService extends Service {
       return { affectedRows: 1 };
     }
     return { affectedRows: 0 };
-
   }
 
   // insert
   async insert(db, param = null) {
-    // console.log(sql);
+
     try {
       return await this.app.mysql.insert(db, param);
     } catch (e) {
       console.log(e);
 
-      let msg = '';
+      let msg = "";
       switch (e.code) {
-        case 'ER_DUP_ENTRY':
-          msg = '记录已存在';
+        case "ER_DUP_ENTRY":
+          msg = "记录已存在";
           break;
         default:
-          msg = '请检查参数与参数格式';
+          msg = "请检查参数与参数格式";
       }
 
       return {

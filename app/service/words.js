@@ -218,8 +218,6 @@ class WordsService extends Service {
 
       await transaction.commit();
 
-      console.log(result);
-
       if (result || updateExplainations) {
         ctx.status = 200;
         return new ctx.helper._success();
@@ -264,8 +262,6 @@ class WordsService extends Service {
       const condition = { id: data.id };
       const word = await Vocabulary.findOne({ where: condition });
 
-      // const result = await word.update(data, { transaction });
-      console.log(word.image);
       if (word.image) {
         delImg(word.image, "words");
       }

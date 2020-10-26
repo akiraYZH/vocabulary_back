@@ -51,7 +51,7 @@ class BooksService extends Service {
         const toAddWords = await Vocabulary.findAll({
           where: { id: data.toAdd },
         });
-        await book.addVocabularies(toAddWords);
+        await book.addWords(toAddWords);
       }
 
       if (data.toRemove) {
@@ -59,7 +59,7 @@ class BooksService extends Service {
           where: { id: data.toRemove },
         });
 
-        await book.removeVocabularies(toRemoveWords);
+        await book.removeWords(toRemoveWords);
       }
 
       ctx.status = 200;
@@ -126,7 +126,7 @@ class BooksService extends Service {
       });
 
       //包含单词
-      const words = await book.getVocabularies(
+      const words = await book.getWords(
         ctx.helper.fixObj({
           attributes: [
             "id",

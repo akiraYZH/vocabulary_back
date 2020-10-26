@@ -1,5 +1,5 @@
-'use strict';
-const Service = require('egg').Service;
+"use strict";
+const Service = require("egg").Service;
 
 class RolesService extends Service {
   async add(data) {
@@ -32,7 +32,6 @@ class RolesService extends Service {
       }
 
       await transaction.commit();
-      console.log(newRole);
 
       if (newRole) {
         ctx.status = 200;
@@ -54,20 +53,18 @@ class RolesService extends Service {
 
     try {
       const result = await Roles.findAll({
-        attributes: [ 'id', 'name' ],
+        attributes: ["id", "name"],
         include: {
           model: Permissions,
-          attributes: [ 'name' ],
+          attributes: ["name"],
           required: false,
-          as: 'permissions',
+          as: "permissions",
         },
       });
 
-      console.log(result);
-
-      result.forEach(role => {
+      result.forEach((role) => {
         const permissions = [];
-        role.permissions.forEach(item => {
+        role.permissions.forEach((item) => {
           permissions.push(item.name);
         });
         delete role.dataValues.permissions;
@@ -79,8 +76,7 @@ class RolesService extends Service {
         return new ctx.helper._success(result);
       }
       ctx.status = 200;
-      return new ctx.helper._success('暂无数据');
-
+      return new ctx.helper._success("暂无数据");
     } catch (error) {
       console.log(error);
 
@@ -88,39 +84,6 @@ class RolesService extends Service {
       return new ctx.helper._error(error);
     }
   }
-
-  // async permissions(data) {
-  //   const { ctx } = this;
-  //   const { Roles, Permissions } = this.app.model.Tables;
-  //   let routes = [];
-  //   try {
-  //     let role = await Roles.findOne({
-  //       where: { status: 1 },
-  //       include: {
-  //         model: PPermission,
-  //         attributes: ["id", "name", "apis"],
-  //         where: {
-  //           status: 1,
-  //         },
-  //         required: false,
-  //         as: "permissions",
-  //       },
-  //     });
-
-  //     console.log(role);
-  //     role.permissions.forEach((item) => {
-  //       routes.push(item.name);
-  //     });
-
-  //     ctx.status = 200;
-  //     return new ctx.helper._success(routes);
-  //   } catch (error) {
-  //     console.log(error);
-
-  //     ctx.status = 500;
-  //     return new ctx.helper._error(error);
-  //   }
-  // }
 
   async update(data) {
     const { ctx } = this;
@@ -140,7 +103,7 @@ class RolesService extends Service {
         const rolePermissions = await role.getPermissions();
         // 先清空
         rolePermissions.forEach(
-          async permission => await permission.destroy({ transaction })
+          async (permission) => await permission.destroy({ transaction })
         );
 
         // 再插入
@@ -155,13 +118,11 @@ class RolesService extends Service {
 
       await transaction.commit();
       if (result || updatePermissions) {
-
         ctx.status = 200;
         return new ctx.helper._success();
       }
       ctx.status = 200;
-      return new ctx.helper._success('没有修改');
-
+      return new ctx.helper._success("没有修改");
     } catch (error) {
       transaction.rollback();
       ctx.status = 500;
@@ -175,15 +136,13 @@ class RolesService extends Service {
     try {
       const condition = { id: data.id };
       const result = await Roles.destroy({ where: condition });
-      console.log(result);
 
       if (result) {
         ctx.status = 200;
         return new ctx.helper._success();
       }
       ctx.status = 200;
-      return new ctx.helper._error('没有删除');
-
+      return new ctx.helper._error("没有删除");
     } catch (error) {
       console.log(error);
 
