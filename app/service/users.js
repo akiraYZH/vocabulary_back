@@ -1,6 +1,7 @@
 "use strict";
 const sequelize = require("sequelize");
 const helper = require("../extend/helper");
+const getRandomArrayElements = require("../utils/getRandomArrayElements");
 const { includes } = require("../utils/rolesList");
 
 const Service = require("egg").Service;
@@ -305,6 +306,7 @@ class UsersService extends Service {
           not_learned_arr: JSON.stringify(not_learned_arr),
           learned_arr: JSON.stringify([]),
           task_today: JSON.stringify(task_today),
+          task_completed: 0,
         },
         { where: condition }
       );
@@ -437,11 +439,33 @@ class UsersService extends Service {
         },
       });
 
+      let allWords = await Vocabulary.findAll({
+        attributes: [
+          "id",
+          "spelling",
+          "spelling_m",
+          "spelling_f",
+          "phonetic",
+          "image",
+          "audio",
+          "difficulty",
+          "primary_explaination",
+        ],
+        include: [
+          {
+            model: Types,
+            required: false,
+            attributes: ["id", "type_abbr", "type", "type_cn"],
+            as: "primary_type",
+          },
+        ],
+      });
+
       // 生成选项
       let exam = [];
       result.forEach((word) => {
         // 过滤本身
-        let options = result.filter(
+        let options = allWords.filter(
           (item) => item.dataValues.id !== word.dataValues.id
         );
 
@@ -470,6 +494,30 @@ class UsersService extends Service {
 
       ctx.status = 500;
       return new ctx.helper._error(error);
+    }
+  }
+
+  //自动任务
+  async updateTask() {
+    const { ctx } = this;
+    const { Users, Books } = this.app.model;
+    try {
+      let users = await Users.findAll({ where: { task_completed: 1 } });
+
+      users.forEach((user) => {
+        const not_learned_arr = JSON.parse(user.dataValues.not_learned_arr);
+        const num_day =
+          user.dataValues.num_day < not_learned_arr.length
+            ? user.dataValues.num_day
+            : not_learned_arr.length;
+        const task_today = getRandomArrayElements(not_learned_arr, num_day);
+        user.update({
+          task_today: JSON.stringify(task_today),
+          task_completed: 0,
+        });
+      });
+    } catch (e) {
+      console.log(e);
     }
   }
 }
