@@ -9,7 +9,7 @@ module.exports = async (app) => {
         type: INTEGER,
         primaryKey: true,
         autoIncrement: true,
-        comment: "记录id",
+        comment: "record id",
       },
     },
     {

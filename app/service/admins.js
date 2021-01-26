@@ -55,7 +55,7 @@ class AdminsService extends Service {
         return Object.assign(new ctx.helper._success(), result);
       }
       ctx.status = 200;
-      return new ctx.helper._success("暂无数据");
+      return new ctx.helper._success("No data");
     } catch (error) {
       console.log(error);
 
@@ -164,7 +164,7 @@ class AdminsService extends Service {
         return new ctx.helper._success();
       }
       ctx.status = 200;
-      return new ctx.helper._error("没有删除");
+      return new ctx.helper._error("Operation failed");
     } catch (error) {
       console.log(error);
 
@@ -183,10 +183,10 @@ class AdminsService extends Service {
 
       if (!result) {
         ctx.status = 200;
-        return new ctx.helper._success("此账号可以使用");
+        return new ctx.helper._success("This account is available.");
       }
       ctx.status = 200;
-      return new ctx.helper._existed("此账号已被占用");
+      return new ctx.helper._existed("This account is used.");
     } catch (error) {
       ctx.status = 500;
       return new ctx.helper._error(error);
@@ -209,10 +209,10 @@ class AdminsService extends Service {
 
       if (!result) {
         ctx.status = 200;
-        return new ctx.helper._success("此邮箱可以使用");
+        return new ctx.helper._success("This email is available.");
       }
       ctx.status = 200;
-      return new ctx.helper._existed("此邮箱已被占用");
+      return new ctx.helper._existed("This email is used.");
     } catch (error) {
       ctx.status = 500;
       return new ctx.helper._error(error);

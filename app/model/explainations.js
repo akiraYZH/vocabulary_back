@@ -8,31 +8,31 @@ module.exports = app => {
         type: INTEGER,
         primaryKey: true,
         autoIncrement: true,
-        comment: '解释id',
+        comment: 'explaination id',
       },
       explaination_cn: {
         type: STRING(255),
-        comment: '中文解释',
+        comment: 'explaination',
         allowNull: false,
       },
       sentence_fr: {
         type: STRING(255),
-        comment: '法语例句',
+        comment: 'French sentence',
         allowNull: true,
       },
       audio: {
         type: STRING(255),
-        comment: '法语句子音频',
+        comment: 'French sentence audio',
         allowNull: true,
       },
       sentence_cn: {
         type: STRING(255),
-        comment: '中文例句',
+        comment: 'Sentence',
         allowNull: true,
       },
       sort: {
         type: INTEGER,
-        comment: '排序',
+        comment: 'Order',
         allowNull: false,
       },
     }

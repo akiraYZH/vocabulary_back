@@ -1,6 +1,6 @@
 
 /**
- * 匹配日常参数,只包含大小写字母,数字,"_"
+ * a-z, A_Z, number, _
  * @param {*} target 
  */
 const regNormal = (target) => {
@@ -8,7 +8,7 @@ const regNormal = (target) => {
 }
 
 /**
- * 匹配日常参数,只包含大小写字母,数字,"_"
+ * Check text
  * @param {*} target 
  */
 const regText = (target) => {
@@ -16,7 +16,7 @@ const regText = (target) => {
 }
 
 /**
- * 匹配手机号码
+ * Phone number
  * @param {*} target 
  */
 const regPhone = (target) => {
@@ -24,7 +24,7 @@ const regPhone = (target) => {
 }
 
 /**
- * 匹配邮箱
+ * E-mail
  * @param {*} target 
  */
 const regEmail = (target) => {
@@ -32,7 +32,7 @@ const regEmail = (target) => {
 }
 
 /**
- * 匹配数值类型
+ * Number
  * @param {*} target 
  */
 const regNumber = (target) => {

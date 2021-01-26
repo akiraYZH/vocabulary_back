@@ -28,7 +28,7 @@ async function checkToken(ctx, next) {
 
   let allowList = ["/api/user/register", "/api/user/login", "/api/admin/login"];
 
-  //检测是否在白名单中
+  //Check if it is in white list
   allowList.forEach((item) => {
     if (url.startsWith(item)) {
       is_pass = true;
@@ -36,22 +36,21 @@ async function checkToken(ctx, next) {
     is_pass = true;
   });
 
-  // 登录 不用检查
+  // login, no check
   if (is_pass) {
     await next();
   } else {
-    // 规定token写在header 的 'token'
+    // set token in header 'token'
     let token = undefined;
 
     if (ctx.request.headers.token) {
       token = ctx.request.headers.token;
     }
 
-    // 解码
+    // decode
     if (token) {
-      //  获取到token
+      //  get token
       let res = decodeToken(token);
-      // console.log(res, 123);
 
       if (res && res.exp <= new Date() / 1000) {
         ctx.body = {
@@ -59,14 +58,9 @@ async function checkToken(ctx, next) {
           code: 9,
         };
       } else {
-        // console.log(token);
-        console.log(token, 123);
 
         let newToken = updateToken(token);
         setToken(ctx.res, newToken);
-        // console.log(newToken);
-
-        // console.log(newTokens);
 
         ctx.body = {
           message: "解析成功",
@@ -75,9 +69,9 @@ async function checkToken(ctx, next) {
         await next();
       }
     } else {
-      // 没有取到token
+      // no token
       ctx.body = {
-        message: "没有token",
+        message: "no token",
         code: -3,
       };
     }

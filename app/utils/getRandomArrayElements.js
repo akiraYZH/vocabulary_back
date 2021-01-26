@@ -1,13 +1,13 @@
-//随机从数组中去除几个元素
+//Randomly eleminate elements in an array
 module.exports = function getRandomArrayElements(arr, count) {
-  // 复制数组
+  // Copy array
   let _arr = arr.slice(0);
   let selected_arr = [];
 
   while (selected_arr.length < count) {
     let index = Math.floor(_arr.length * Math.random());
 
-    // 加到目标数组
+    // Push to target array
     selected_arr.push(_arr.splice(index, 1)[0]);
   }
 

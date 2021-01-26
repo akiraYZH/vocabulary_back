@@ -110,10 +110,10 @@ class BooksService extends Service {
     try {
       if (data.keyword) {
         if (/^[a-zA-Z àâäèéêëîïôœùûüÿçÀÂÄÈÉÊËÎÏÔŒÙÛÜŸÇ]*$/.test(data.keyword)) {
-          // 匹配法语
+          // Frech
           data.keyword_fr = data.keyword;
         } else if (/^[a-zA-Z0-9_\u4e00-\u9fa5]+$/.test(data.keyword)) {
-          // 匹配中文
+          // Chinese
           data.keyword_cn = data.keyword;
         }
       }
@@ -125,7 +125,7 @@ class BooksService extends Service {
         },
       });
 
-      //包含单词
+      //Words
       const words = await book.getWords(
         ctx.helper.fixObj({
           attributes: [
@@ -145,13 +145,13 @@ class BooksService extends Service {
         })
       );
 
-      // 获得单词书包含的单词id数组
+      // Get the array of words' ids contained in vocabulary
       const aBooKWordsId = [];
       words.forEach((word) => {
         aBooKWordsId.push(word.id);
       });
 
-      // 不包含单词
+      // Get the words not included in the vocaburary book
       const unincludedWords = await Vocabulary.findAll(
         ctx.helper.fixObj({
           attributes: [
@@ -172,7 +172,7 @@ class BooksService extends Service {
         })
       );
 
-      // 清除不需要的联表信息
+      // get rid off the info unneeded
       for (let i = 0; i < words.length; i++) {
         delete words[i].dataValues.vocabulary_and_books;
       }
@@ -187,7 +187,7 @@ class BooksService extends Service {
         return Object.assign(new ctx.helper._success(), resObj);
       }
       ctx.status = 200;
-      return new ctx.helper._error("暂无数据");
+      return new ctx.helper._error("No data");
     } catch (error) {
       console.log(error);
 
@@ -209,7 +209,7 @@ class BooksService extends Service {
         return new ctx.helper._success();
       }
       ctx.status = 200;
-      return new ctx.helper._success("没有修改");
+      return new ctx.helper._success("No modification");
     } catch (error) {
       ctx.status = 500;
       return new ctx.helper._error(error);
@@ -228,7 +228,7 @@ class BooksService extends Service {
         return new ctx.helper._success();
       }
       ctx.status = 200;
-      return new ctx.helper._error("没有删除");
+      return new ctx.helper._error("Operation failed ");
     } catch (error) {
       console.log(error);
 

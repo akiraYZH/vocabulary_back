@@ -17,7 +17,7 @@ class WordsService extends Service {
     // removePermissions: [Function],
     // createPermission: [Function]
     const { Vocabulary, Explainations } = this.app.model;
-    // 创建事务对象
+    // Create transaction
     const transaction = await this.ctx.model.transaction();
     try {
       const newWord = await Vocabulary.create(data, { transaction });
@@ -49,10 +49,10 @@ class WordsService extends Service {
 
       if (data.keyword) {
         if (/^[a-zA-Z àâäèéêëîïôœùûüÿçÀÂÄÈÉÊËÎÏÔŒÙÛÜŸÇ]*$/.test(data.keyword)) {
-          // 匹配法语
+          // french
           data.keyword_fr = data.keyword;
         } else if (/^[a-zA-Z0-9_\u4e00-\u9fa5]+$/.test(data.keyword)) {
-          // 匹配中文
+          // chinese
           data.keyword_cn = data.keyword;
         }
       }
@@ -118,7 +118,7 @@ class WordsService extends Service {
         return Object.assign(new ctx.helper._success(), result);
       }
       ctx.status = 200;
-      return new ctx.helper._error("暂无数据");
+      return new ctx.helper._error("No data");
     } catch (error) {
       console.log(error);
 
@@ -203,12 +203,12 @@ class WordsService extends Service {
       if (data.explainations) {
         updateExplainations = true;
         const wordExplainations = await word.getExplainations();
-        // 先清空
+        // clear
         wordExplainations.forEach(
           async (explaination) => await explaination.destroy({ transaction })
         );
 
-        // 再插入
+        // insert
         const newExplainations = await Explainations.bulkCreate(
           data.explainations,
           { transaction }
@@ -223,7 +223,7 @@ class WordsService extends Service {
         return new ctx.helper._success();
       }
       ctx.status = 200;
-      return new ctx.helper._success("没有修改");
+      return new ctx.helper._success("No modifications");
     } catch (error) {
       transaction.rollback();
       ctx.status = 500;
@@ -243,7 +243,7 @@ class WordsService extends Service {
         return new ctx.helper._success();
       }
       ctx.status = 200;
-      return new ctx.helper._error("没有删除");
+      return new ctx.helper._error("delete failed");
     } catch (error) {
       console.log(error);
 
@@ -276,7 +276,7 @@ class WordsService extends Service {
         return new ctx.helper._success();
       }
       ctx.status = 200;
-      return new ctx.helper._success("没有修改");
+      return new ctx.helper._success("No modifications");
     } catch (error) {
       console.log(error);
       transaction.rollback();

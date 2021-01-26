@@ -13,32 +13,32 @@ class checkDataModel {
 }
 
 class _success extends checkDataModel {
-    constructor(data, msg = "成功操作") {
+    constructor(data, msg = "Success") {
         super(data, msg, 1);
     }
 }
 
 class _error extends checkDataModel {
-    constructor(data, msg = "操作错误") {
+    constructor(data, msg = "Error") {
         super(data, msg, 0);
     }
 }
 
 class _notFound extends checkDataModel {
-    constructor(data, msg = "请求方式不对或者接口地址不正确") {
+    constructor(data, msg = "Wrong method or wrong api") {
         super(data, msg, 0);
     }
 }
 
 class _existed extends checkDataModel {
-    constructor(data, msg = "此记录已经存在") {
+    constructor(data, msg = "Record exists already") {
         super(data, msg, 3);
     }
 }
 
 class _lack extends checkDataModel {
     constructor(data, msg) {
-        data = data ? `参数${data}格式不对或者缺失` : "缺少必填参数";
+        data = data ? `param ${data} is wrong format or missing` : "missing necessary params.";
         super(data, msg, 2);
     }
 }

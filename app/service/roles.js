@@ -101,12 +101,12 @@ class RolesService extends Service {
       if (data.permissions) {
         updatePermissions = true;
         const rolePermissions = await role.getPermissions();
-        // 先清空
+        // clear
         rolePermissions.forEach(
           async (permission) => await permission.destroy({ transaction })
         );
 
-        // 再插入
+        // insert
         for (let i = 0; i < data.permissions.length; i++) {
           const permission = { name: data.permissions[i] };
           const newPermission = await Permissions.create(permission, {

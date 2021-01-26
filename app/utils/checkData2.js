@@ -1,4 +1,4 @@
-//是否是全部参数
+// check if the parameters are properly passed
 //missing necessary:1
 //wrong format:2
 const {
@@ -11,7 +11,7 @@ const {
 
 const extraCheck = (targetName, targetVal) => {
   if (Array.isArray(targetVal)) {
-    //如果传进来的是数组
+    //Array
     if (targetVal.length === 0) {
       return true;
     }
@@ -75,7 +75,7 @@ const checkArr = function (arr) {
       }
     } else {
       if (!regNormal(item)) {
-        //有错
+        //Error
         aErrors.push(index);
       }
     }
@@ -95,8 +95,8 @@ function checkArrContentType(arr) {
   return isConsistent;
 }
 
-//全部参数需要进行简单检测(必须填)
-//指定某些参数需要进行特定检测(必须填)
+//All params needs to be tested(Must)
+//Test certain params(Must)
 const checkData = (ctx, ...targetArr) => {
   let dataObj = {};
 
@@ -108,7 +108,7 @@ const checkData = (ctx, ...targetArr) => {
 
   for (k of targetArr) {
     if (dataObj[k] == undefined || null) {
-      return { is_pass: false, msg: `缺少必填参数${k}` };
+      return { is_pass: false, msg: `Missing param ${k}` };
     }
   }
 
@@ -119,12 +119,12 @@ const checkData = (ctx, ...targetArr) => {
       if (typeof res == "boolean") {
         return { is_pass: false, msg: k };
       } else {
-        return { is_pass: false, msg: `参数${k}-下标:${res.errors}格式错误` };
+        return { is_pass: false, msg: `Param ${k}-index:${res.errors} wrong format` };
       }
     }
   }
 
-  return { is_pass: true, msg: `格式正确` };
+  return { is_pass: true, msg: `Right format` };
 };
 
 module.exports = checkData;

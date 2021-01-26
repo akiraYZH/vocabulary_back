@@ -1,19 +1,19 @@
-//去除对象中为空的属性
-//入口
+//Get rid off the "null", "undefined" properties in an object
+//Entry
 const fixObj = function (obj) {
   return fix(obj, obj);
 };
 
-//检查对象一层的属性
+//Check obj first layer
 function fix(obj, originalObj) {
-  //去掉所有空的属性
+  //get rid off all "null", "undefined" props
   if (Object.keys(obj).length) {
     Object.keys(obj).forEach((attr) => {
       eleminate(obj, attr, originalObj);
     });
   }
 
-  //处理Op的Symbol
+  //Deal with the Symbols
   if (Object.getOwnPropertySymbols(obj).length) {
     let isSuccess = false;
     for (
@@ -35,7 +35,7 @@ function fix(obj, originalObj) {
   return obj;
 }
 
-//检测属性，如果为空就删除属性，属性为对象就调用你fix()
+//Check props, delete when props are "null" or "undefined", if the prop is an obj, call fix()
 function eleminate(obj, attr, originalObj) {
   if (obj[attr] instanceof Object) {
     if (obj[attr] instanceof Array) {
@@ -45,7 +45,6 @@ function eleminate(obj, attr, originalObj) {
         obj[attr].forEach((item) => {
           if (item instanceof Object && !(item instanceof Array)) {
             console.log("ok");
-
             fix(item, originalObj);
           }
         });

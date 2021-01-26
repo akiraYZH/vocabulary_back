@@ -5,20 +5,20 @@ var formidable = require("formidable");
 // var fs = require("fs");
 // var formidable = require("formidable");
 /*
-* 上传图片的模块
-* req,请求对象
-* picName,上传name名字
-* cb:回调函数
-* 返回结果：
+* Upload img module
+* req,request obj
+* picName, upload name
+* cb:callback
+* return：
 *   cb({
-        status:1,//1、上传的是一个空文件  2上传成功啦 3 上传格式错误
-        params:params  //表单当中，除了上传文件之外的内容 。
-        newName:图片的名字。
-        msg:结果的文字说明
+        status:1,//1、empty file  2 successful 3 wrong format
+        params:params  //content
+        newName: name of img。
+        msg: discription
     })*/
 
 function uploadImg(req, folder) {
-  var form = new formidable.IncomingForm(); //创建上传表单
+  var form = new formidable.IncomingForm(); // Create upload form
   var uploadPath = path.join(__dirname, "../", "/public", "/" + folder);
 
   var loadPath =
@@ -26,12 +26,11 @@ function uploadImg(req, folder) {
       ? "http://127.0.0.1:7001/public/" + folder
       : "http://francais-api.akirayu.cn/public/" + folder;
 
-  console.log(process.env.NODE_ENV);
 
-  form.encoding = "utf-8"; //设置编辑
-  form.uploadDir = uploadPath; //设置上传目录
-  form.keepExtensions = true; //保留后缀
-  form.maxFieldsSize = 5 * 1024 * 1024; //文件大小
+  form.encoding = "utf-8"; //charset
+  form.uploadDir = uploadPath; //upload path
+  form.keepExtensions = true; //keep extension
+  form.maxFieldsSize = 5 * 1024 * 1024; //img size
 
   //检测是否存在目录,不存在就创建
   if (!fs.existsSync(uploadPath)) {
@@ -49,15 +48,15 @@ function uploadImg(req, folder) {
       } else {
         var num = file["file"].path.lastIndexOf(".");
         var extension = file["file"].path.substr(num).toLowerCase();
-        //支持图片上传的格式。
+        // support types 
         var imgType = ".jpg.jpeg.png.gif";
-        //验证上传图片的类型是不是图片格式
+        // Check if the file type is image format
         if (imgType.includes(extension)) {
           var newName = new Date().getTime() + extension;
-          //改变名字（重命名），异步
+          // rename
           fs.renameSync(file["file"].path, form.uploadDir + "/" + newName);
           resolve({
-            status: 1, //上传成功啦
+            status: 1, //upload success
             params: params,
             path: loadPath + "/" + newName,
             newName: newName,
@@ -66,11 +65,10 @@ function uploadImg(req, folder) {
         } else {
           fs.unlinkSync(file["file"].path);
           resolve({
-            status: 0, //上传格式错误
+            status: 0, //wrong format
             params: params,
             msg: `请上传${imgType}格式的图片`,
           });
-          // return ()
         }
       }
     });
@@ -80,7 +78,6 @@ function uploadImg(req, folder) {
 function delImg(url, folder) {
   var delPath = path.join(__dirname, "../", "/public", "/" + folder);
   var filename = url.slice(url.lastIndexOf("/"));
-  //   console.log(delPath + "/" + filename, 123);
   fs.unlinkSync(delPath + "/" + filename);
   return { code: 1, msg: "成功删除" };
 }

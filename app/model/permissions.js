@@ -8,15 +8,11 @@ module.exports = app => {
         type: INTEGER,
         primaryKey: true,
         autoIncrement: true,
-        comment: '用户id',
+        comment: 'User id',
       },
-      // apis: {
-      //   type: TEXT,
-      //   comment: "接口"
-      // },
       name: {
         type: STRING(50),
-        comment: '权限标识符',
+        comment: 'Permissions',
       },
     }
   );

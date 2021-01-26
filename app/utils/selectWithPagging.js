@@ -15,21 +15,21 @@ const selectWithPagging = async function (model, options) {
   };
   return res;
 
-  //总入口
+  //Entry
   function fixObj(obj) {
     return fix(obj, obj);
   }
 
-  //检查对象一层的属性
+  //Check obj props
   function fix(obj, originalObj) {
-    //去掉所有空的属性
+    // Get rid off all null or undefined props
     if (Object.keys(obj).length) {
       Object.keys(obj).forEach((attr) => {
         eleminate(obj, attr, originalObj);
       });
     }
 
-    //处理Op的Symbol
+    //Deal Op Symbol
     if (Object.getOwnPropertySymbols(obj).length) {
       let isSuccess = false;
       for (
@@ -51,7 +51,7 @@ const selectWithPagging = async function (model, options) {
     return obj;
   }
 
-  //检测属性，如果为空就删除属性，属性为对象就调用你fix()
+  //Check props, delete when props are "null" or "undefined", if the prop is an obj, call fix()
   function eleminate(obj, attr, originalObj) {
     if (obj[attr] instanceof Object) {
       if (obj[attr] instanceof Array) {

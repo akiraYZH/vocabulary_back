@@ -8,11 +8,11 @@ module.exports = (app) => {
       type: INTEGER,
       primaryKey: true,
       autoIncrement: true,
-      comment: "单词书id",
+      comment: "Book id",
     },
     title: {
       type: STRING(255),
-      comment: "单词书名称",
+      comment: "Book name",
       allowNull: false,
     },
   });

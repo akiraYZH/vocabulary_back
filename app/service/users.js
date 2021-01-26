@@ -110,17 +110,17 @@ class UsersService extends Service {
       });
 
       if (user) {
-        //更新上一次登陆时间
+        //update last login time
         await user.update({ last_login_time: Date.now() });
 
-        // 将下列字段从string变为array
+        // convert string to array
         user.dataValues.learned_arr = JSON.parse(user.dataValues.learned_arr);
         user.dataValues.not_learned_arr = JSON.parse(
           user.dataValues.not_learned_arr
         );
         user.dataValues.task_today = JSON.parse(user.dataValues.task_today);
 
-        // 保存到redis
+        // save ti redis
         const token = ctx.helper.addToken({ email: user.email });
         ctx.helper._setRedis("user_" + user.email, user);
         ctx.helper.setToken(ctx.res, token);
@@ -179,14 +179,14 @@ class UsersService extends Service {
       if (user) {
         await user.update({ last_login_time: Date.now() });
 
-        // 将下列字段从string变为array
+        // convert string to array
         user.dataValues.learned_arr = JSON.parse(user.dataValues.learned_arr);
         user.dataValues.not_learned_arr = JSON.parse(
           user.dataValues.not_learned_arr
         );
         user.dataValues.task_today = JSON.parse(user.dataValues.task_today);
 
-        // 保存到redis
+        // save to redis
         const token = ctx.helper.addToken({ email: user.email });
         ctx.helper._setRedis("user_" + user.email, user);
         ctx.helper.setToken(ctx.res, token);
@@ -211,7 +211,7 @@ class UsersService extends Service {
       const condition = { id: data.id };
       delete data.id;
 
-      //处理需要变成string的数据
+      //deal with data that need to stringify
       if (data.not_learned_arr) {
         data.not_learned_arr = JSON.stringify(data.not_learned_arr);
       }
@@ -229,7 +229,7 @@ class UsersService extends Service {
         return new ctx.helper._success();
       }
       ctx.status = 200;
-      return new ctx.helper._error("没有修改");
+      return new ctx.helper._error("No modification");
     } catch (error) {
       console.log(error);
 
@@ -256,7 +256,7 @@ class UsersService extends Service {
         return new ctx.helper._success();
       }
       ctx.status = 200;
-      return new ctx.helper._error("没有修改");
+      return new ctx.helper._error("no modifications");
     } catch (error) {
       console.log(error);
 
@@ -281,24 +281,24 @@ class UsersService extends Service {
         },
       });
 
-      // 每天要背的单词数量如果比书的单词总量大， 取书的单词总量
+      // If the task number is greater than the book word number, take the book word
       const count =
         data.num_day <= book.words.length ? data.num_day : book.words.length;
 
-      // 还没学习的单词id
+      // not leanrd words ids
       const not_learned_arr = book.words.map((word) => word.id);
 
-      //今天要学习的单词id
+      //to learn words ids
       const task_today = ctx.helper.getRandomArrayElements(
         not_learned_arr,
         count
       );
 
-      // where的条件
+      // where conditions
       const condition = { id: data.id };
       delete data.id;
 
-      // 初始化数据
+      // initialize data
       const result = await Users.update(
         {
           now_book: data.book_id,
@@ -316,7 +316,7 @@ class UsersService extends Service {
         return new ctx.helper._success();
       }
       ctx.status = 200;
-      return new ctx.helper._error("没有修改");
+      return new ctx.helper._error("No modifications");
     } catch (error) {
       console.log(error);
 
@@ -337,7 +337,7 @@ class UsersService extends Service {
         return new ctx.helper._success();
       }
       ctx.status = 200;
-      return new ctx.helper._error("没有删除");
+      return new ctx.helper._error("delete failed");
     } catch (error) {
       console.log(error);
 
@@ -356,10 +356,10 @@ class UsersService extends Service {
 
       if (!result) {
         ctx.status = 200;
-        return new ctx.helper._success("此昵称可以使用");
+        return new ctx.helper._success("This nickname is available");
       }
       ctx.status = 200;
-      return new ctx.helper._existed("此昵称已被占用");
+      return new ctx.helper._existed("This nickname is already used");
     } catch (error) {
       ctx.status = 500;
       return new ctx.helper._error(error);

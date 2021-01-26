@@ -2,23 +2,20 @@ const { decodeToken, updateToken, setToken } = require("../utils/Token.js");
 
 module.exports = (options, app) => {
   return async function checkToken(ctx, next) {
-    // 规定token写在header 的 'token'
+    // set token in header 'token'
     let token = undefined;
 
     if (ctx.request.headers.authentication) {
       token = ctx.request.headers.authentication;
     }
 
-    // 解码
+    // decode
     if (token) {
-      //  获取到token
+      //  get token
       let res = decodeToken(token);
-      console.log(token);
-      console.log(res);
-      console.log(res.exp, new Date() / 1000);
       if (res && res.exp <= new Date() / 1000) {
         ctx.body = {
-          msg: "token过期",
+          msg: "token expired",
           code: -1,
         };
       } else {
@@ -26,7 +23,7 @@ module.exports = (options, app) => {
         setToken(ctx.res, newToken);
 
         ctx.body = {
-          msg: "解析成功",
+          msg: "decoded successfully",
           code: 1,
         };
         await next();
@@ -34,7 +31,7 @@ module.exports = (options, app) => {
     } else {
       // 没有取到token
       ctx.body = {
-        msg: "没有token",
+        msg: "No token",
         code: -3,
       };
     }

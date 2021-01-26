@@ -5,7 +5,7 @@ class CommonService extends Service {
   async get(db, param) {
     return await this.app.mysql.get(db, param);
   }
-  // 查询全部
+  // find all
   async select(db, param = "", columns = "") {
     const condition = {};
     param && (condition.where = param);
@@ -17,11 +17,11 @@ class CommonService extends Service {
     }
   }
 
-  // 再升级版, 此版本为leftJoin版本，模糊搜索和精准搜索能同时存在
-  // 查询带分页功能
-  // param为对象类型, 为sql语句WHERE的条件,不传填''
-  // colums为数组类型, 为需要查询的字段,,不传填''
-  // is_search为布尔类型, 是否开启模糊查询
+  // leftJoin version
+  // Pagination
+  // param:Object, sql WHERE conditions 
+  // colums:Array, fields that need to include
+  // is_search: Boolean, if it is search mode
   async selectPagination({
     db,
     param = null,
@@ -36,7 +36,7 @@ class CommonService extends Service {
     let sql = "";
     let page_now = 1;
     let num_in_page = 10;
-    // 分页
+    // Pagination
     if (param.page_now || param.page_now !== undefined) {
       page_now = param.page_now;
       delete param.page_now;
@@ -50,9 +50,9 @@ class CommonService extends Service {
       delete param.num_in_page;
     }
 
-    // 联表处理
+    // Deal with join tables
     if (!joins.length) {
-      // 没有联表
+      // no join table
 
       if (columns.length) {
         sql = `SELECT ${columns.join(", ")} FROM ${db}`;
@@ -60,14 +60,14 @@ class CommonService extends Service {
         sql = `SELECT * from ${db}`;
       }
     } else {
-      // 联表
+      // join table
       if (columns.length) {
         sql = `SELECT ${columns.join(", ")} FROM ${db} ${joins.join(" ")}`;
       } else {
         sql = `SELECT * FROM ${db} ${joins.join(" ")}`;
       }
     }
-    // 加上WHERE
+    // WHERE conditions
     sql += " WHERE 1=1";
 
     if (param) {
@@ -94,10 +94,6 @@ class CommonService extends Service {
       }
     }
 
-    // if (joins.length && ons.length) {
-    //   // 加联表条件
-    //   sql += " AND " + ons.join(" AND ");
-    // }
     const sqlCount = sql;
 
     sql += ` LIMIT ${(page_now - 1) * num_in_page},${num_in_page}`;
@@ -130,12 +126,12 @@ class CommonService extends Service {
 
       return {
         affectedRows: 0,
-        msg: "请检查参数与参数格式",
+        msg: "Please check params and format of params",
       };
     }
   }
 
-  // 多次插入
+  // multi insert
   async multiInsert(db, list) {
     const conn = await this.app.mysql.beginTransaction();
 
@@ -152,7 +148,7 @@ class CommonService extends Service {
     }
 
     if (!hasError) {
-      // commit才会确定修改
+      // commit--save
       await conn.commit();
       return { affectedRows: 1 };
     }
@@ -170,10 +166,10 @@ class CommonService extends Service {
       let msg = "";
       switch (e.code) {
         case "ER_DUP_ENTRY":
-          msg = "记录已存在";
+          msg = "Record existed already";
           break;
         default:
-          msg = "请检查参数与参数格式";
+          msg = "Please check params and their formats";
       }
 
       return {

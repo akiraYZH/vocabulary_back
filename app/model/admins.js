@@ -8,18 +8,18 @@ module.exports = app => {
         type: INTEGER,
         primaryKey: true,
         autoIncrement: true,
-        comment: '管理者id',
+        comment: 'admin id',
       },
       account: {
         type: STRING(50),
-        comment: '管理者的账号',
+        comment: 'admin account',
         allowNull: false,
       },
-      email: { type: STRING(50), comment: '邮箱', allowNull: false },
-      password: { type: STRING(50), comment: '密码', allowNull: false },
+      email: { type: STRING(50), comment: 'email', allowNull: false },
+      password: { type: STRING(50), comment: 'password', allowNull: false },
     },
     {
-      // timestamp:true会自动创建created_at和updated_at字段
+      // timestamp:true    automatically create "created_at" and "updated_at" fields
       // timestamps: false,
       paranoid: true,
       indexes: [
@@ -35,7 +35,7 @@ module.exports = app => {
     app.model.Admins.belongsTo(app.model.Roles, { foreignKey: 'role_id', as: 'role', onDelete: 'SET NULL' });
   };
   // p_user.sync({
-  //   //改变表的结构，保留数据
+  //   //change structure of table, but keep the data
   //   alter: true
   // }).then(() => {
   //   console.log("p_user Table has been created");

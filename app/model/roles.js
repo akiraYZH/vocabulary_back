@@ -6,12 +6,12 @@ module.exports = app => {
       type: INTEGER,
       primaryKey: true,
       autoIncrement: true,
-      comment: '用户id',
+      comment: 'Role id',
     },
     name: {
       type: STRING(50),
       unique: false,
-      comment: '角色名',
+      comment: 'Role',
       allowNull: false,
     },
   });

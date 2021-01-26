@@ -6,24 +6,24 @@ module.exports = app => {
       type: INTEGER,
       primaryKey: true,
       autoIncrement: true,
-      comment: '词性id',
+      comment: 'Type the word id',
     },
     type_abbr: {
       type: STRING(50),
       unique: false,
-      comment: '词性缩写',
+      comment: 'abbr type',
       allowNull: false,
     },
     type: {
       type: STRING(50),
       unique: false,
-      comment: '词性全写',
+      comment: 'full type name',
       allowNull: false,
     },
     type_cn: {
       type: STRING(50),
       unique: false,
-      comment: '词性中文',
+      comment: 'type (cn)',
       allowNull: false,
     },
   });

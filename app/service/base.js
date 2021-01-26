@@ -3,7 +3,7 @@ const svgCaptcha = require("svg-captcha");
 const sendMail = require("../utils/sendMail");
 
 class ToolsService extends Service {
-  // 产生验证码
+  // Generate verification code
   async captcha() {
     const captcha = svgCaptcha.create({
       size: 4,
@@ -13,8 +13,6 @@ class ToolsService extends Service {
       bacground: "#cc9966",
     });
     this.ctx.session.code = captcha.text;
-    // await this.ctx.render("captcha");
-    console.log(this.ctx.session.code, 9999);
     return captcha;
   }
 
@@ -32,12 +30,10 @@ class ToolsService extends Service {
 
       if (user) {
         const captcha = svgCaptcha.create();
-        // const token = ctx.helper.addToken({ email: user.email });
         this.ctx.session.forgetInfo = {
           email: user.email,
           code: captcha.text,
         };
-        // ctx.helper.setToken(ctx.res, token);
         sendMail(user.email, "修改密码的验证码", captcha.text);
         ctx.status = 200;
         return new ctx.helper._success();
