@@ -65,7 +65,7 @@ class TypesService extends Service {
         return new ctx.helper._success();
       }
       ctx.status = 200;
-      return new ctx.helper._success("没有修改");
+      return new ctx.helper._success("No modifications");
     } catch (error) {
       ctx.status = 500;
       return new ctx.helper._error(error);
@@ -84,7 +84,7 @@ class TypesService extends Service {
         return new ctx.helper._success();
       }
       ctx.status = 200;
-      return new ctx.helper._error("没有删除");
+      return new ctx.helper._error("Delete failed");
     } catch (error) {
       console.log(error);
 

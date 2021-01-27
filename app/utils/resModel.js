@@ -44,13 +44,13 @@ class _lack extends checkDataModel {
 }
 
 class _notLogin extends checkDataModel {
-    constructor(data, msg = "请登录后再进行操作") {
+    constructor(data, msg = "Please login") {
         super(data, msg, -1);
     }
 }
 
 class _notPermitted extends checkDataModel {
-    constructor(data, msg = "没有权限") {
+    constructor(data, msg = "No permission") {
         super(data, msg, -2);
     }
 }

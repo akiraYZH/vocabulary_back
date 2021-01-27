@@ -94,7 +94,7 @@ class BooksService extends Service {
         return new ctx.helper._success(result);
       }
       ctx.status = 200;
-      return new ctx.helper._error("暂无数据");
+      return new ctx.helper._error("No data");
     } catch (error) {
       console.log(error);
 

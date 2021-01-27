@@ -5,18 +5,18 @@ const { uploadImg } = require("../utils/uploadImg");
 
 class WordsController extends Controller {
   /**
- * @api {Post} /api/words/add 增加单词
+ * @api {Post} /api/words/add Add word
  * @apiGroup Words
  *
- * @apiParam {String} spelling 单词
- * @apiParam {String} spelling_m 单词阳性拼写
- * @apiParam {String} spelling_f 单词阴性拼写
- * @apiParam {String} phonetic 单词音标
- * @apiParam {Array} explainations 单词解释数组
- * @apiParam {Number} difficulty 难度：1为基础， 2为中级， 3为高级
- * @apiParam {Number} primary_type_id 词性id
- * @apiParam {String} primary_explaination 主要含义
- * @apiParamExample {json} 参数例子
+ * @apiParam {String} spelling spelling of word
+ * @apiParam {String} spelling_m spelling of word(m)
+ * @apiParam {String} spelling_f spelling of word(f)
+ * @apiParam {String} phonetic phonetic
+ * @apiParam {Array} explainations explainations
+ * @apiParam {Number} difficulty fifficulty：1 basic， 2 intermediate， 3 advanced
+ * @apiParam {Number} primary_type_id type id
+ * @apiParam {String} primary_explaination primary meaning
+ * @apiParamExample {json} param example
   {
 	"spelling":"bas",
 	"spelling_m":"bas",
@@ -64,15 +64,15 @@ class WordsController extends Controller {
   }
 
   /**
-   * @api {Get} /api/words/get 获得单词列表
+   * @api {Get} /api/words/get get words list
    * @apiGroup Words
    *
-   * @apiParam {Number} id (可选：精准)用户ID
-   * @apiParam {Number} difficulty 难度：1为基础， 2为中级， 3为高级(可选)
-   * @apiParam {Number} primary_type_id 主要词性id(可选)
-   * @apiParam {String} keyword (可选：模糊)按spelling或者explaination_cn模糊搜索
-   * @apiParam {Number} current(可选)当前页
-   * @apiParam {Number} size(可选)每页个数
+   * @apiParam {Number} id (optional: accurate)wordID
+   * @apiParam {Number} difficulty difficulty：1 basic， 2 intermediate， 3 advanced(optional)
+   * @apiParam {Number} primary_type_id primary type id(optional)
+   * @apiParam {String} keyword (optional：blur)search by spelling or explaination_cn
+   * @apiParam {Number} current(optional) current page
+   * @apiParam {Number} size(optional) page size
    * @apiSuccessExample
 {{
     "code": 200,
@@ -151,10 +151,10 @@ class WordsController extends Controller {
   }
 
   /**
-   * @api {Get} /api/words/get-words 获得单词列表
+   * @api {Get} /api/words/get-words get words list
    * @apiGroup Words
    *
-   * @apiParam {Array} id_arr 单词id
+   * @apiParam {Array} id_arr word ids
    * @apiSuccessExample
 {{
     "code": 200,
@@ -238,18 +238,18 @@ class WordsController extends Controller {
   }
 
   /**
-   * @api {Put} /api/words/update 更改单词书名称
+   * @api {Put} /api/words/update update word
    * @apiGroup Words
-   * @apiParam {Number} id 单词ID
-   * @apiParam {String} spelling 单词
-   * @apiParam {String} spelling_m 单词阳性拼写
-   * @apiParam {String} spelling_f 单词阴性拼写
-   * @apiParam {String} phonetic 单词音标
-   * @apiParam {Array} explainations 单词解释数组
-   * @apiParam {Number} difficulty 难度：1为基础， 2为中级， 3为高级
-   * @apiParam {Number} primary_type_id 词性id
-   * @apiParam {String} primary_explaination 主要含义
-   * @apiParamExample {json} 参数例子
+   * @apiParam {Number} id word ID
+   * @apiParam {String} spelling word spelling
+   * @apiParam {String} spelling_m word spelling(m)
+   * @apiParam {String} spelling_f word spelling(f)
+   * @apiParam {String} phonetic phonetic
+   * @apiParam {Array} explainations explainations
+   * @apiParam {Number} difficulty difficulty：1 basis， 2 intermediate， 3 advanced
+   * @apiParam {Number} primary_type_id type id
+   * @apiParam {String} primary_explaination primary meaning
+   * @apiParamExample {json} param example
     {
       "id":2,
       "spelling":"bas",
@@ -289,15 +289,15 @@ class WordsController extends Controller {
     }
   }
   /**
- * @api {Delete} /api/words/del 删除单词
+ * @api {Delete} /api/words/del delete word
  * @apiGroup Words
- * @apiParam {Number} id 单词ID
+ * @apiParam {Number} id word ID
  *
  *
- * @apiSuccessExample  {json} 成功返回
+ * @apiSuccessExample  {json} Success
   {
       "code": 200,
-      "msg": "成功操作"
+      "msg": "Success"
   }
  */
   async del() {
@@ -312,14 +312,14 @@ class WordsController extends Controller {
   }
 
   /**
- * @api {Post} /api/words/upload-img 上传图片
+ * @api {Post} /api/words/upload-img upload img
  * @apiGroup Words
  *
  *
- * @apiSuccessExample  {json} 成功返回
+ * @apiSuccessExample  {json} Success
   {
       "code": 200,
-      "msg": "成功操作"
+      "msg": "Success"
   }
  */
   async uploadImg() {
@@ -328,17 +328,17 @@ class WordsController extends Controller {
   }
 
   /**
- * @api {Post} /api/words/img 改变单词url
+ * @api {Post} /api/words/img Change image url
  * @apiGroup Words
- * @apiParam {Number} id 单词ID
- * @apiParam {String} oldImg 旧单词图片
- * @apiParam {Number} newImg 新单词图片
+ * @apiParam {Number} id word ID
+ * @apiParam {String} oldImg old img url
+ * @apiParam {String} newImg new img url
  *
  *
- * @apiSuccessExample  {json} 成功返回
+ * @apiSuccessExample  {json} Success
   {
       "code": 200,
-      "msg": "成功操作"
+      "msg": "Success"
   }
  */
   async img() {

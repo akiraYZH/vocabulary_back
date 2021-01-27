@@ -4,15 +4,15 @@ const Controller = require("egg").Controller;
 
 class BooksController extends Controller {
   /**
- * @api {Post} /api/books/add 增加单词书
+ * @api {Post} /api/books/add add word book
  * @apiGroup Books
  *
- * @apiParam {String} title 书名
+ * @apiParam {String} title book name
  *
- * @apiSuccessExample  {json} 成功返回
+ * @apiSuccessExample  {json} Success
 {
     "code": 200,
-    "msg": "成功操作",
+    "msg": "Success",
     "data": {
         "insertId": 1
     }
@@ -32,21 +32,21 @@ class BooksController extends Controller {
   }
 
   /**
- * @api {Post} /api/books/distribute-words 为单词书增加单词
+ * @api {Post} /api/books/distribute-words Add word to book
  * @apiGroup Books
- * @apiParam {Number} id 单词书ID
- * @apiParam {Array} toAdd 要增加的单词id的数组
- * @apiParam {Array} toRemove 要去除的单词id的数组
- * @apiParamExample {json} 参数实例
+ * @apiParam {Number} id book ID
+ * @apiParam {Array} toAdd ids of words to book
+ * @apiParam {Array} toRemove  ids of words to remove from book
+ * @apiParamExample {json} Param example
 {
 	"id":2,
   "toAdd":[1,2],
   "toRemove":[1,2],
 }
- * @apiSuccessExample  {json} 成功返回
+ * @apiSuccessExample  {json} Success
 {
     "code": 200,
-    "msg": "成功操作"
+    "msg": "Success"
 }
  */
 
@@ -63,17 +63,17 @@ class BooksController extends Controller {
   }
 
   /**
-   * @api {Get} /api/books/get 获得单词书列表
+   * @api {Get} /api/books/get Get book list
    * @apiGroup Books
    *
    * @apiSuccessExample
    {
     "code": 200,
-    "msg": "成功操作",
+    "msg": "Success",
     "data": [
         {
             "id": 2,
-            "title": "基本词汇",
+            "title": "Basic",
             "count": 1
         }
     ]
@@ -86,14 +86,14 @@ class BooksController extends Controller {
   }
 
   /**
-   * @api {Get} /api/books/get-words 获得单词书含有和不含有的单词
+   * @api {Get} /api/books/get-words get words info of book
    * @apiGroup Books
-   * @apiParam {Number} id 单词书ID
-   * @apiParam {String} keyword 关键词
+   * @apiParam {Number} id word ID
+   * @apiParam {String} keyword keyword
    * @apiSuccessExample
    {
     "code": 1,
-    "msg": "成功操作",
+    "msg": "Success",
     "included": [
         {
             "id": 2,
@@ -185,15 +185,15 @@ class BooksController extends Controller {
   }
 
   /**
-   * @api {Put} /api/books/update 更改单词书名称
+   * @api {Put} /api/books/update modify book info
    * @apiGroup Books
-   * @apiParam {Number} id 单词书ID
-   * @apiParam {String} title 单词书名（可选）
+   * @apiParam {Number} id book ID
+   * @apiParam {String} title book title（optional）
    *
    * @apiSuccessExample
    {
     "code": 200,
-    "msg": "成功操作"
+    "msg": "Success"
 }
    *
    */
@@ -210,15 +210,15 @@ class BooksController extends Controller {
     }
   }
   /**
- * @api {Delete} /api/books/del 删除管理者
+ * @api {Delete} /api/books/del Delete book
  * @apiGroup Books
- * @apiParam {Number} id 书本ID
+ * @apiParam {Number} id book ID
  *
  *
- * @apiSuccessExample  {json} 成功返回
+ * @apiSuccessExample  {json} Success
   {
       "code": 200,
-      "msg": "成功操作"
+      "msg": "Success"
   }
  */
   async del() {

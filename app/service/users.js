@@ -381,10 +381,10 @@ class UsersService extends Service {
       const result = await Users.findOne({ where: condition });
       if (!result) {
         ctx.status = 200;
-        return new ctx.helper._success("此邮箱可以使用");
+        return new ctx.helper._success("This email is available");
       }
       ctx.status = 200;
-      return new ctx.helper._existed("此邮箱已被占用");
+      return new ctx.helper._existed("This email is used");
     } catch (error) {
       ctx.status = 500;
       return new ctx.helper._error(error);
@@ -461,10 +461,10 @@ class UsersService extends Service {
         ],
       });
 
-      // 生成选项
+      // generate options
       let exam = [];
       result.forEach((word) => {
-        // 过滤本身
+        // filter self
         let options = allWords.filter(
           (item) => item.dataValues.id !== word.dataValues.id
         );
@@ -488,7 +488,7 @@ class UsersService extends Service {
         return new ctx.helper._success(exam);
       }
       ctx.status = 200;
-      return new ctx.helper._error("暂无数据");
+      return new ctx.helper._error("No data");
     } catch (error) {
       console.log(error);
 
@@ -497,7 +497,7 @@ class UsersService extends Service {
     }
   }
 
-  //自动任务
+  //auto task
   async updateTask() {
     const { ctx } = this;
     const { Users, Books } = this.app.model;

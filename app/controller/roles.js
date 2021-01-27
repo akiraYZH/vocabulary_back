@@ -4,15 +4,15 @@ const Controller = require("egg").Controller;
 
 class RolesController extends Controller {
   /**
- * @api {Post} /api/roles/add 角色
+ * @api {Post} /api/roles/add Add role
  * @apiGroup Roles
  *
- * @apiParam {String} name 角色名
- * @apiParam {Array} permissions 权限标识符数组
- * @apiSuccessExample  {json} 成功返回
+ * @apiParam {String} name role name
+ * @apiParam {Array} permissions permissions
+ * @apiSuccessExample  {json} Success
 {
     "code": 200,
-    "msg": "成功操作",
+    "msg": "Success",
     "data": {
         "insertId": 1
     }
@@ -33,13 +33,13 @@ class RolesController extends Controller {
   }
 
   /**
-   * @api {Get} /api/roles/get 获得权限角色列表
+   * @api {Get} /api/roles/get Get role list
    * @apiGroup Roles
    *
    * @apiSuccessExample
    {
     "code": 200,
-    "msg": "成功操作",
+    "msg": "Success",
     "data": [
         {
             "id": 1,
@@ -61,16 +61,16 @@ class RolesController extends Controller {
   }
 
   /**
-   * @api {Put} /api/roles/update 获得权限角色列表
+   * @api {Put} /api/roles/update update role info
    * @apiGroup Roles
-   * @apiParam {Number} id 角色ID
-   * @apiParam {String} name 角色名字（可选）
-   * @apiParam {Arrary} permissions 权限标识符数组（可选）
+   * @apiParam {Number} id role ID
+   * @apiParam {String} name role name（optional）
+   * @apiParam {Arrary} permissions permissions（optional）
    *
    * @apiSuccessExample
    {
     "code": 200,
-    "msg": "成功操作"
+    "msg": "Success"
 }
    *
    */
@@ -87,15 +87,15 @@ class RolesController extends Controller {
     }
   }
   /**
- * @api {Delete} /api/roles/del 删除角色
+ * @api {Delete} /api/roles/del Delete role
  * @apiGroup Rols
- * @apiParam {Number} id 角色ID
+ * @apiParam {Number} id role ID
  *
  *
- * @apiSuccessExample  {json} 成功返回
+ * @apiSuccessExample  {json} Success
   {
       "code": 200,
-      "msg": "成功操作"
+      "msg": "Success"
   }
  */
   async del() {

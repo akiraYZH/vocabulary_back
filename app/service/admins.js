@@ -105,7 +105,7 @@ class AdminsService extends Service {
         ctx.status = 200;
         return new ctx.helper._success(loginRes);
       }
-      return new ctx.helper._error("账号或密码错误");
+      return new ctx.helper._error("Wrong password or account not exists");
     } catch (error) {
       console.log(error);
 
@@ -144,7 +144,7 @@ class AdminsService extends Service {
         ctx.status = 200;
         return new ctx.helper._success();
       }
-      return new ctx.helper._error("没有修改");
+      return new ctx.helper._error("No modifications");
     } catch (error) {
       ctx.status = 500;
       return new ctx.helper._error(error);

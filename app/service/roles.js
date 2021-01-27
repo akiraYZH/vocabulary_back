@@ -76,7 +76,7 @@ class RolesService extends Service {
         return new ctx.helper._success(result);
       }
       ctx.status = 200;
-      return new ctx.helper._success("暂无数据");
+      return new ctx.helper._success("No data");
     } catch (error) {
       console.log(error);
 
@@ -122,7 +122,7 @@ class RolesService extends Service {
         return new ctx.helper._success();
       }
       ctx.status = 200;
-      return new ctx.helper._success("没有修改");
+      return new ctx.helper._success("No modifications");
     } catch (error) {
       transaction.rollback();
       ctx.status = 500;
@@ -142,7 +142,7 @@ class RolesService extends Service {
         return new ctx.helper._success();
       }
       ctx.status = 200;
-      return new ctx.helper._error("没有删除");
+      return new ctx.helper._error("Delete failed");
     } catch (error) {
       console.log(error);
 

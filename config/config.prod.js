@@ -40,12 +40,12 @@ module.exports = (appInfo) => {
     host: "127.0.0.1",
     port: 3306,
     database: "vocabulary",
-    username: "root", //账号
-    password: "Zhihao817!", //密码
+    username: "root", //account
+    password: "Zhihao817!", //password
     define: {
-      // 字段以下划线（_）来分割（默认是驼峰命名风格）
+      // fields splited by（_)
       underscored: true,
-      //防止sequelize把表名变成复数
+      //prevent sequelize turn table names to plurial
       freezeTableName: true,
       // paranoid:true
     },
@@ -57,7 +57,7 @@ module.exports = (appInfo) => {
     maxAge: 864000,
     httpOnly: true,
     encrypt: true,
-    renew: true, //延长会话有效期
+    renew: true, 
   };
   return {
     ...config,

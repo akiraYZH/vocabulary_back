@@ -4,17 +4,17 @@ const Controller = require('egg').Controller;
 
 class TypesController extends Controller {
   /**
- * @api {Post} /api/types/add 增加词性
+ * @api {Post} /api/types/add Add type
  * @apiGroup Types
  *
- * @apiParam {String} type_abbr 词性缩写
- * @apiParam {String} type 词性全拼
- * @apiParam {String} type_cn 词性中文
+ * @apiParam {String} type_abbr abbreviation of type
+ * @apiParam {String} type type
+ * @apiParam {String} type_cn type explaination
  *
- * @apiSuccessExample  {json} 成功返回
+ * @apiSuccessExample  {json} Success
 {
     "code": 200,
-    "msg": "成功操作",
+    "msg": "Success",
     "data": {
         "insertId": 1
     }
@@ -36,13 +36,13 @@ class TypesController extends Controller {
 
 
   /**
-   * @api {Get} /api/types/get 获得词性列表
+   * @api {Get} /api/types/get get type list
    * @apiGroup Types
    *
    * @apiSuccessExample
    {
     "code": 200,
-    "msg": "成功操作",
+    "msg": "Success",
     "data": [
         {
             "id": 1,
@@ -121,16 +121,16 @@ class TypesController extends Controller {
 
 
   /**
-   * @api {Put} /api/types/update 更改词性
+   * @api {Put} /api/types/update Update type
    * @apiGroup Types
-   * @apiParam {String} type_abbr 词性缩写(可选)
-   * @apiParam {String} type 词性全拼（可选）
-   * @apiParam {String} type_cn 词性中文（可选）
+   * @apiParam {String} type_abbr abbreviation of type(optional)
+   * @apiParam {String} type type(optional）
+   * @apiParam {String} type_cn type explaination（optional）
    *
    * @apiSuccessExample
    {
     "code": 200,
-    "msg": "成功操作"
+    "msg": "Success"
 }
    *
    */
@@ -148,15 +148,15 @@ class TypesController extends Controller {
     }
   }
   /**
- * @api {Delete} /api/types/del 删除词性
+ * @api {Delete} /api/types/del Delete type
  * @apiGroup Types
- * @apiParam {Number} id 词性ID
+ * @apiParam {Number} id type ID
  *
  *
- * @apiSuccessExample  {json} 成功返回
+ * @apiSuccessExample  {json} Success
   {
       "code": 200,
-      "msg": "成功操作"
+      "msg": "Success"
   }
  */
   async del() {

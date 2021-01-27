@@ -34,12 +34,12 @@ class ToolsService extends Service {
           email: user.email,
           code: captcha.text,
         };
-        sendMail(user.email, "修改密码的验证码", captcha.text);
+        sendMail(user.email, "Verification code", captcha.text);
         ctx.status = 200;
         return new ctx.helper._success();
       }
       ctx.status = 200;
-      return new ctx.helper._error("账号不存在");
+      return new ctx.helper._error("Account not exists");
     } catch (error) {
       console.log(error);
 
@@ -59,7 +59,7 @@ class ToolsService extends Service {
         ctx.status = 200;
         return new ctx.helper._success({ auth: token });
       } else {
-        return new ctx.helper._error("验证码不正确");
+        return new ctx.helper._error("Wrong verification code");
       }
     } catch (error) {
       console.log(error);

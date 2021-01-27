@@ -4,16 +4,16 @@ const Controller = require("egg").Controller;
 
 class AdminsController extends Controller {
   /**
- * @api {Post} /api/admins/add 增加管理者
+ * @api {Post} /api/admins/add Add new admin
  * @apiGroup Admins
  *
- * @apiParam {String} account 管理者账号
- * @apiParam {String} password 管理者密码
- * @apiParam {String} email 管理者邮箱
- * @apiSuccessExample  {json} 成功返回
+ * @apiParam {String} account admin account
+ * @apiParam {String} password admin password
+ * @apiParam {String} email admin email
+ * @apiSuccessExample  {json} Success
  {
     "code": 200,
-    "msg": "成功注册",
+    "msg": "Success",
     "data": {
         "insertId": 38
     }
@@ -39,16 +39,16 @@ class AdminsController extends Controller {
   }
 
   /**
- * @api {Post} /api/admin/login 登陆
+ * @api {Post} /api/admin/login login
  * @apiGroup Admins
  *
- * @apiParam {String} account 管理者账号
- * @apiParam {String} password 管理者密码
+ * @apiParam {String} account admin account
+ * @apiParam {String} password admin password
  *
- * @apiSuccessExample  {json} 成功返回
+ * @apiSuccessExample  {json} Success
  {
     "code": 200,
-    "msg": "成功操作",
+    "msg": "Success",
     "data": {
         "id": 1,
         "account": "akira",
@@ -84,15 +84,15 @@ class AdminsController extends Controller {
   }
 
   /**
- * @api {Post} /api/admin/login-token 用token登陆
+ * @api {Post} /api/admin/login-token login with token
  * @apiGroup Admins
  *
  * @apiParam {Header} authentication token
  *
- * @apiSuccessExample  {json} 成功返回
+ * @apiSuccessExample  {json} Success
  {
     "code": 200,
-    "msg": "成功操作",
+    "msg": "Success",
     "data": {
         "id": 1,
         "account": "akira",
@@ -121,18 +121,18 @@ class AdminsController extends Controller {
   }
 
   /**
- * @api {Get} /api/admins/get 获得管理者列表
+ * @api {Get} /api/admins/get get admin list
  * @apiGroup Admins
- * @apiParam {Number} id (可选：精准)管理者ID
- * @apiParam {String} keyword (可选：模糊)按account或者email模糊搜索
- * @apiParam {Number} current(可选)当前页
- * @apiParam {Number} size(可选)每页个数
+ * @apiParam {Number} id (optional：accurate)admin ID
+ * @apiParam {String} keyword (optional：blur) search by account or email
+ * @apiParam {Number} current(optional) current page
+ * @apiParam {Number} size(optional) page size
  *
  *
- * @apiSuccessExample  {json} 成功返回
+ * @apiSuccessExample  {json} Success
 {
     "code": 200,
-    "msg": "成功操作",
+    "msg": "Success",
     "data": [
         {
             "id": 1,
@@ -159,20 +159,20 @@ class AdminsController extends Controller {
   }
 
   /**
- * @api {Post} /api/admins/check-account 检查账户是否已经存在
+ * @api {Post} /api/admins/check-account Check if account exists
  * @apiGroup Admins
- * @apiParam {String} account 管理者账号
+ * @apiParam {String} account admin account
  *
  *
- * @apiSuccessExample  {json} 成功返回
+ * @apiSuccessExample  {json} Success
   {
     "code": 200,
-    "msg": "此账号可以使用"
+    "msg": "This account is available"
 }
-* @apiSuccessExample  {json} 失败返回
+* @apiSuccessExample  {json} Fail
 {
     "code": 400,
-    "msg": "此账号已被占用"
+    "msg": "this account is taken"
 }
  */
   async checkAccount() {
@@ -188,21 +188,21 @@ class AdminsController extends Controller {
   }
 
   /**
- * @api {Post} /api/admins/check-email 检查账户是否已经存在
+ * @api {Post} /api/admins/check-email Check if admin email exists
  * @apiGroup Admins
- * @apiParam {String} email 管理者邮箱
- * @apiParam {Number} id 要过滤的管理者id(可选)
+ * @apiParam {String} email admin email
+ * @apiParam {Number} id admin id(optional)
  *
  *
- * @apiSuccessExample  {json} 成功返回
+ * @apiSuccessExample  {json} Success
   {
     "code": 200,
-    "msg": "此邮箱可以使用"
+    "msg": "This email is available"
 }
-* @apiSuccessExample  {json} 失败返回
+* @apiSuccessExample  {json} Fail
 {
     "code": 400,
-    "msg": "此邮箱已被占用"
+    "msg": "This email is used"
 }
  */
   async checkEmail() {
@@ -217,18 +217,18 @@ class AdminsController extends Controller {
   }
 
   /**
- * @api {Post} /api/admins/update 修改管理者
+ * @api {Post} /api/admins/update update admin info
  * @apiGroup Admins
- * @apiParam {Number} id 管理者ID
- * @apiParam {String} password 管理者密码()
- * @apiParam {String} email 管理者邮箱
- * @apiParam {String} role_id 角色id
+ * @apiParam {Number} id admin ID
+ * @apiParam {String} password admin password
+ * @apiParam {String} email admin email
+ * @apiParam {String} role_id role id
  *
  *
- * @apiSuccessExample  {json} 成功返回
+ * @apiSuccessExample  {json} Success
 {
     "code": 200,
-    "msg": "成功操作"
+    "msg": "Success"
 }
  */
   async update() {
@@ -243,15 +243,15 @@ class AdminsController extends Controller {
   }
 
   /**
- * @api {Post} /api/admin/del 删除管理者
+ * @api {Post} /api/admin/del Delete admin
  * @apiGroup Admins
- * @apiParam {Number} id 管理者ID
+ * @apiParam {Number} id admin ID
  *
  *
- * @apiSuccessExample  {json} 成功返回
+ * @apiSuccessExample  {json} Success
  {
     "code": 200,
-    "msg": "成功操作"
+    "msg": "Success"
 }
  */
   async del() {
