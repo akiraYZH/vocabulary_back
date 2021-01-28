@@ -24,7 +24,7 @@ function uploadImg(req, folder) {
   var loadPath =
     process.env.NODE_ENV == "development"
       ? "http://127.0.0.1:7001/public/" + folder
-      : "http://francais-api.akirayu.cn/public/" + folder;
+      : "http://francais-api.akirayu.space/public/" + folder;
 
 
   form.encoding = "utf-8"; //charset
@@ -76,9 +76,14 @@ function uploadImg(req, folder) {
 }
 
 function delImg(url, folder) {
+  
   var delPath = path.join(__dirname, "../", "/public", "/" + folder);
   var filename = url.slice(url.lastIndexOf("/"));
-  fs.unlinkSync(delPath + "/" + filename);
-  return { code: 1, msg: "成功删除" };
+  try{
+    fs.unlinkSync(delPath + "/" + filename);
+    return { code: 1, msg: "成功删除" };
+  } catch(e) {
+    return;
+  }
 }
 module.exports = { uploadImg, delImg };
