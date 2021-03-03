@@ -4,16 +4,16 @@ const Controller = require("egg").Controller;
 
 class UsersController extends Controller {
   /**
- * @api {Post} /api/users/add 增加用户
+ * @api {Post} /api/users/add Add user
  * @apiGroup Users
  *
- * @apiParam {String} nickname 用户账号
- * @apiParam {String} password 用户密码
- * @apiParam {String} email 用户邮箱
- * @apiSuccessExample  {json} 成功返回
+ * @apiParam {String} nickname user account
+ * @apiParam {String} password user password
+ * @apiParam {String} email user email
+ * @apiSuccessExample  {json} Success
  {
     "code": 1,
-    "msg": "成功注册",
+    "msg": "Success",
     "data": {
         "insertId": 38
     }
@@ -38,16 +38,16 @@ class UsersController extends Controller {
   }
 
   /**
- * @api {Post} /api/users/login 登陆
+ * @api {Post} /api/users/login user login
  * @apiGroup Users
  *
- * @apiParam {String} email 用户账号
- * @apiParam {String} password 用户密码
+ * @apiParam {String} email user account
+ * @apiParam {String} password user password
  *
- * @apiSuccessExample  {json} 成功返回
+ * @apiSuccessExample  {json} Success
  {
     "code": 1,
-    "msg": "成功操作",
+    "msg": "Success",
     "data": {
         "id": 1,
         "nickname": "akira",
@@ -74,15 +74,15 @@ class UsersController extends Controller {
   }
 
   /**
- * @api {Post} /api/users/login-token 用token登陆
+ * @api {Post} /api/users/login-token login with token
  * @apiGroup Users
  *
  * @apiParam {Header} authentication token
  *
- * @apiSuccessExample  {json} 成功返回
+ * @apiSuccessExample  {json} Success
  {
     "code": 200,
-    "msg": "成功操作",
+    "msg": "Success",
     "data": {
         "id": 1,
         "account": "akira",
@@ -110,18 +110,18 @@ class UsersController extends Controller {
     ctx.body = await service.users.loginToken();
   }
   /**
- * @api {Get} /api/users/get 获得用户列表
+ * @api {Get} /api/users/get get user list
  * @apiGroup Users
- * @apiParam {Number} id (可选：精准)用户ID
- * @apiParam {String} keyword (可选：模糊)按account或者email模糊搜索
- * @apiParam {Number} current(可选)当前页
- * @apiParam {Number} size(可选)每页个数
+ * @apiParam {Number} id (optional:accurat)user ID
+ * @apiParam {String} keyword (optional:blur)search by account or email
+ * @apiParam {Number} current(optional) current page
+ * @apiParam {Number} size(optional)page size
  *
  *
- * @apiSuccessExample  {json} 成功返回
+ * @apiSuccessExample  {json} Success
 {
     "code": 1,
-    "msg": "成功操作",
+    "msg": "Success",
     "data": [
         {
             "id": 1,
@@ -146,20 +146,20 @@ class UsersController extends Controller {
   }
 
   /**
- * @api {Post} /api/users/checkNickname 检查昵称是否已经存在
+ * @api {Post} /api/users/checkNickname Check if nickname exists
  * @apiGroup Users
- * @apiParam {String} nickname 用户账号
+ * @apiParam {String} nickname user account
  *
  *
- * @apiSuccessExample  {json} 成功返回
+ * @apiSuccessExample  {json} Success
   {
     "code": 1,
-    "msg": "此昵称可以使用"
+    "msg": "This nickname is available"
 }
-* @apiSuccessExample  {json} 失败返回
+* @apiSuccessExample  {json} Fail
 {
     "code": 3,
-    "msg": "此昵称已被占用"
+    "msg": "This nickname is used"
 }
  */
   async checkNickname() {
@@ -174,20 +174,20 @@ class UsersController extends Controller {
   }
 
   /**
- * @api {Post} /api/users/check-email 检查账户是否已经存在
+ * @api {Post} /api/users/check-email Check user email exists
  * @apiGroup Users
- * @apiParam {String} email 用户邮箱
+ * @apiParam {String} email user email
  *
  *
- * @apiSuccessExample  {json} 成功返回
+ * @apiSuccessExample  {json} Success
   {
     "code": 1,
-    "msg": "此邮箱可以使用"
+    "msg": "This email is available"
 }
-* @apiSuccessExample  {json} 失败返回
+* @apiSuccessExample  {json} fail
 {
     "code": 3,
-    "msg": "此邮箱已被占用"
+    "msg": "This email is used"
 }
  */
   async checkEmail() {
@@ -202,17 +202,17 @@ class UsersController extends Controller {
   }
 
   /**
- * @api {Post} /api/users/chooseBook 修改用户
+ * @api {Post} /api/users/chooseBook update user
  * @apiGroup Users
- * @apiParam {Number} id 用户ID
- * @apiParam {Number} num_day 一天背诵单词个数
- * @apiParam {Number} book_id 单词书id
+ * @apiParam {Number} id user ID
+ * @apiParam {Number} num_day task number per day
+ * @apiParam {Number} book_id book id
  *
  *
- * @apiSuccessExample  {json} 成功返回
+ * @apiSuccessExample  {json} Success
 {
     "code": 1,
-    "msg": "成功操作"
+    "msg": "Success"
 }
  */
   async chooseBook() {
@@ -227,22 +227,22 @@ class UsersController extends Controller {
   }
 
   /**
- * @api {Put} /api/users/update 修改用户
+ * @api {Put} /api/users/update update user
  * @apiGroup Users
- * @apiParam {Number} id 用户ID
- * @apiParam {String} password 用户密码(可选)
- * @apiParam {String} email 用户邮箱（可选）
- * @apiParam {Array} not_learned_arr 还没学习的单词数组（可选）
- * @apiParam {Array} learned_arr 已经学习的单词（可选）
- * @apiParam {Number} task_completed 每天任务：1:完成，0:未完成（可选）
- * @apiParam {Number} num_day 一天背诵个数可选）
- * @apiParam {Number} now_book 单词书id
+ * @apiParam {Number} id user ID
+ * @apiParam {String} password user password (optional)
+ * @apiParam {String} email user email（optional）
+ * @apiParam {Array} not_learned_arr words not learned（optional）
+ * @apiParam {Array} learned_arr words learned （optional）
+ * @apiParam {Number} task_completed task：1:complete，0:not complete（optional）
+ * @apiParam {Number} num_day number to remember per day
+ * @apiParam {Number} now_book book id
  *
  *
- * @apiSuccessExample  {json} 成功返回
+ * @apiSuccessExample  {json} Success
 {
     "code": 1
-    "msg": "成功操作"
+    "msg": "Success"
 }
  */
   async update() {
@@ -257,16 +257,16 @@ class UsersController extends Controller {
   }
 
   /**
- * @api {Put} /api/users/changePass 修改用户
+ * @api {Put} /api/users/changePass Update user
  * @apiGroup Users
- * @apiParam {String} password 用户密码
- * @apiParam {String} auth token值
+ * @apiParam {String} password user password
+ * @apiParam {String} auth token
  *
  *
- * @apiSuccessExample  {json} 成功返回
+ * @apiSuccessExample  {json} Success
 {
     "code": 1
-    "msg": "成功操作"
+    "msg": "Success"
 }
  */
   async changePass() {
@@ -280,15 +280,15 @@ class UsersController extends Controller {
     }
   }
   /**
- * @api {Post} /api/users/del 删除用户
+ * @api {Post} /api/users/del delete user
  * @apiGroup Users
- * @apiParam {Number} id 用户ID
+ * @apiParam {Number} id user ID
  *
  *
- * @apiSuccessExample  {json} 成功返回
+ * @apiSuccessExample  {json} Success
  {
     "code": 1,
-    "msg": "成功操作"
+    "msg": "Success"
 }
  */
   async del() {
@@ -303,14 +303,14 @@ class UsersController extends Controller {
   }
 
   /**
-   * @api {Post} /api/users/get-exams 获得测试
+   * @api {Post} /api/users/get-exams get exam
    * @apiGroup Users
    *
-   * @apiParam {Array} id_arr 单词id
+   * @apiParam {Array} id_arr words id
    * @apiSuccessExample
 {{
     "code": 200,
-    "msg": "成功操作",
+    "msg": "Success",
     "data": [
         {
             "id": 2,
